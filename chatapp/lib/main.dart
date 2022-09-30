@@ -1,3 +1,4 @@
+import 'package:chatapp/screens/messages_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: const Color.fromARGB(255, 44, 45, 56),
         canvasColor: const Color.fromARGB(255, 44, 45, 56),
       ),
-      home: const RoomsScreen(),
+      home: const MessagesScreen(),
       routes: {
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
