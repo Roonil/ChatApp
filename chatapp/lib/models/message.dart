@@ -1,10 +1,18 @@
 class Message {
-  int id, threadId, userId, receiverId;
+  int id, threadId, userId, receiverId, roomId;
   List<Message?> responses;
   Message? responseTo;
   String body;
   DateTime createdAt = DateTime.now();
 
-  Message(this.userId, this.receiverId, this.responses, this.responseTo,
-      this.threadId, this.id, this.body);
+  Message({
+    required this.roomId,
+    required this.userId,
+    required this.receiverId,
+    required this.responses,
+    required this.responseTo,
+    required this.threadId,
+    required this.id,
+    required this.body,
+  });
 }

@@ -1,4 +1,4 @@
-import './models/rooms.dart';
+import 'models/room.dart';
 
 final dummyRooms = [
   Room(id: 1, hostId: 1, description: "Let's learn C++!"),

@@ -1,9 +1,41 @@
 import './models/message.dart';
 
 final dummyMessages = [
-  Message(1, 2, [], null, 3, 3, "First Message"),
-  Message(2, 1, [], null, 4, 4, "Second Message"),
-  Message(1, 2, [], null, 5, 5, "Third Message"),
-  Message(2, 1, [], null, 6, 6,
-      "Fourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeated"),
+  Message(
+      roomId: 1,
+      userId: 2,
+      receiverId: 1,
+      responses: [],
+      responseTo: null,
+      threadId: 4,
+      id: 4,
+      body: "Second Message"),
+  Message(
+      roomId: 1,
+      userId: 1,
+      receiverId: 2,
+      responses: [],
+      responseTo: null,
+      threadId: 3,
+      id: 3,
+      body: "First Message"),
+  Message(
+      roomId: 1,
+      userId: 1,
+      receiverId: 2,
+      responses: [],
+      responseTo: null,
+      threadId: 5,
+      id: 5,
+      body: "Third Message"),
+  Message(
+      roomId: 1,
+      userId: 2,
+      receiverId: 1,
+      responses: [],
+      responseTo: null,
+      threadId: 6,
+      id: 6,
+      body:
+          "Fourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeatedFourth Message but repeated"),
 ];

@@ -18,19 +18,19 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.indigo,
+      // theme: ThemeData(primarySwatch: Colors.indigo).copyWith(
       //   primaryColor: const Color.fromARGB(255, 63, 65, 85),
       //   backgroundColor: const Color.fromARGB(255, 44, 45, 56),
-      //   canvasColor: const Color.fromARGB(255, 17, 41, 60),
+      //   canvasColor: const Color.fromARGB(255, 44, 45, 56),
       // ),
-      theme: ThemeData(primarySwatch: Colors.indigo).copyWith(
-        primaryColor: const Color.fromARGB(255, 63, 65, 85),
-        backgroundColor: const Color.fromARGB(255, 44, 45, 56),
-        canvasColor: const Color.fromARGB(255, 44, 45, 56),
+      theme: ThemeData(
+        colorSchemeSeed: Colors.red,
+        brightness: Brightness.dark,
+        useMaterial3: true,
       ),
-      home: const MessagesScreen(),
+      home: const RoomsScreen(),
       routes: {
+        MessagesScreen.routeName: (context) => const MessagesScreen(),
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
     );

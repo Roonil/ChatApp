@@ -17,6 +17,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: const NavDrawer(),
       appBar: AppBar(
+        elevation: 3,
         title: const Text("Rooms"),
       ),
       body: const RoomsList(),
