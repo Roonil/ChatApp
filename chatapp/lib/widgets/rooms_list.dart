@@ -1,13 +1,18 @@
-import 'package:chatapp/screens/messages_screen.dart';
+import 'package:chatapp/screens/gc_messages_screen.dart';
 import 'package:flutter/material.dart';
 import '../dummy_rooms.dart';
 import 'package:intl/intl.dart';
 
-class RoomsList extends StatelessWidget {
+class RoomsList extends StatefulWidget {
   const RoomsList({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<RoomsList> createState() => _RoomsListState();
+}
+
+class _RoomsListState extends State<RoomsList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -24,9 +29,10 @@ class RoomsList extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                MessagesScreen.routeName,
+                GCMessagesScreen.routeName,
                 arguments: {
                   'roomId': dummyRooms[index].id,
+                  'roomName': dummyRooms[index].title,
                 },
               );
               // ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +60,7 @@ class RoomsList extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          dummyRooms[index].description,
+                          dummyRooms[index].title,
                           style: TextStyle(
                               fontSize: 19,
                               fontFamily: 'RobotoCondensed',
@@ -67,9 +73,6 @@ class RoomsList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  //title: Text(dummyRooms[index].description),
-                  //subtitle:
-                  //Text(DateFormat.yMMMd().format(dummyRooms[index].createdAt)),
                   trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [

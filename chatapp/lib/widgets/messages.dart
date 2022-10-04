@@ -11,20 +11,11 @@ class Messages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return Container(
-    // decoration: const BoxDecoration(
-    //   gradient: LinearGradient(
-    //       colors: [Colors.blue, Colors.cyan],
-    //       begin: Alignment.centerLeft,
-    //       end: Alignment.centerRight),
-    // ),
-    //child:
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return Row(
-          children: [
-            ChatBubble(messageBody: messages[index].body),
-          ],
+        return ChatBubble(
+          messageBody: messages[index].body,
+          messageUserId: messages[index].userId,
         );
       },
       itemCount: messages.length,

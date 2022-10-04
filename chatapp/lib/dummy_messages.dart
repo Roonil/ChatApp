@@ -9,7 +9,7 @@ final dummyMessages = [
       responseTo: null,
       threadId: 4,
       id: 4,
-      body: "Second Message"),
+      body: "First Message"),
   Message(
       roomId: 1,
       userId: 1,
@@ -18,7 +18,7 @@ final dummyMessages = [
       responseTo: null,
       threadId: 3,
       id: 3,
-      body: "First Message"),
+      body: "Second Message"),
   Message(
       roomId: 1,
       userId: 1,
@@ -28,6 +28,15 @@ final dummyMessages = [
       threadId: 5,
       id: 5,
       body: "Third Message"),
+  Message(
+      roomId: 2,
+      userId: 1,
+      receiverId: 2,
+      responses: [],
+      responseTo: null,
+      threadId: 5,
+      id: 5,
+      body: "Shouldn't appear in any rooms except 2!"),
   Message(
       roomId: 1,
       userId: 2,

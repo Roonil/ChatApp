@@ -1,4 +1,4 @@
-import 'package:chatapp/screens/messages_screen.dart';
+import 'package:chatapp/screens/gc_messages_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -24,13 +24,13 @@ class _MyAppState extends State<MyApp> {
       //   canvasColor: const Color.fromARGB(255, 44, 45, 56),
       // ),
       theme: ThemeData(
-        colorSchemeSeed: Colors.red,
+        colorSchemeSeed: Colors.indigo[200],
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
       home: const RoomsScreen(),
       routes: {
-        MessagesScreen.routeName: (context) => const MessagesScreen(),
+        GCMessagesScreen.routeName: (context) => const GCMessagesScreen(),
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
     );
