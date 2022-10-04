@@ -38,12 +38,12 @@ class NavDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               alignment: Alignment.centerLeft,
               color: Theme.of(context).primaryColorDark,
-              child: const Text(
+              child: Text(
                 'Welcome, User!',
                 style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 30,
-                    color: Colors.white),
+                    color: Theme.of(context).textTheme.titleLarge?.color),
               ),
             ),
             createNavEntry(
