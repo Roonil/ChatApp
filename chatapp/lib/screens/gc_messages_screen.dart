@@ -1,16 +1,42 @@
+import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
 import '../widgets/messages.dart';
 import 'package:chatapp/dummy_messages.dart';
 
-class GCMessagesScreen extends StatelessWidget {
+class GCMessagesScreen extends StatefulWidget {
   static const routeName = "/messages";
   const GCMessagesScreen({Key? key}) : super(key: key);
 
+  @override
+  State<GCMessagesScreen> createState() => _GCMessagesScreenState();
+}
+
+class _GCMessagesScreenState extends State<GCMessagesScreen> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map;
     final int roomId = args['roomId'];
     final String roomName = args['roomName'];
+    final messageController = TextEditingController();
+
+    void sendMessage() {
+      final message = messageController.text;
+      if (message.isEmpty || message.trim().isEmpty) {
+        return;
+      }
+      setState(() {
+        dummyMessages.add(Message(
+            roomId: roomId,
+            userId: 1,
+            receiverId: 2,
+            responses: [],
+            responseTo: null,
+            threadId: 1,
+            id: 2,
+            body: message));
+      });
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -21,12 +47,14 @@ class GCMessagesScreen extends StatelessWidget {
         ),
         title: Text(roomName),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Messages(
-            messages: dummyMessages
-                .where((dummyMessage) => dummyMessage.roomId == roomId)
-                .toList(),
+          Flexible(
+            child: Messages(
+              messages: dummyMessages
+                  .where((dummyMessage) => dummyMessage.roomId == roomId)
+                  .toList(),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -40,12 +68,25 @@ class GCMessagesScreen extends StatelessWidget {
                   color: Theme.of(context)
                       .copyWith(brightness: Brightness.light)
                       .cardColor),
-              child: const TextField(
-                decoration: InputDecoration(
-                    hintText: "Message", border: InputBorder.none),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
+                        hintText: "Message",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: sendMessage,
+                    icon: const Icon(Icons.send),
+                  ),
+                ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

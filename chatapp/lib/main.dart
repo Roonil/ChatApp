@@ -1,9 +1,23 @@
-import 'package:chatapp/screens/gc_messages_screen.dart';
-import 'package:chatapp/screens/rooms_screen.dart';
+import './models/profile.dart';
+import './models/user.dart';
+import 'package:provider/provider.dart';
+
+import './screens/gc_messages_screen.dart';
+import './screens/rooms_screen.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: ((context) =>
+          Profile(id: 1, userId: 1, bio: "bio", userName: "userName")),
+    ),
+    ChangeNotifierProvider(
+      create: (context) =>
+          User(email: "email", password: "password", role: "role"),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -18,11 +32,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      // theme: ThemeData(primarySwatch: Colors.indigo).copyWith(
-      //   primaryColor: const Color.fromARGB(255, 63, 65, 85),
-      //   backgroundColor: const Color.fromARGB(255, 44, 45, 56),
-      //   canvasColor: const Color.fromARGB(255, 44, 45, 56),
-      // ),
       theme: ThemeData(
         colorSchemeSeed: Colors.indigo[200],
         brightness: Brightness.dark,

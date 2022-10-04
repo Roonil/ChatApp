@@ -1,4 +1,6 @@
+import 'package:chatapp/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PrefixConnector extends StatelessWidget {
   const PrefixConnector({
@@ -55,6 +57,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int userId = Provider.of<User>(context, listen: false).id;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: userId != messageUserId
