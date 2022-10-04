@@ -1,3 +1,6 @@
+import 'package:chatapp/screens/OTP_verification_screen.dart';
+import 'package:chatapp/screens/login_screen.dart';
+import 'package:chatapp/screens/messages_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,19 +19,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.indigo,
-      //   primaryColor: const Color.fromARGB(255, 63, 65, 85),
-      //   backgroundColor: const Color.fromARGB(255, 44, 45, 56),
-      //   canvasColor: const Color.fromARGB(255, 17, 41, 60),
-      // ),
-      theme: ThemeData(primarySwatch: Colors.indigo).copyWith(
-        primaryColor: const Color.fromARGB(255, 63, 65, 85),
-        backgroundColor: const Color.fromARGB(255, 44, 45, 56),
-        canvasColor: const Color.fromARGB(255, 44, 45, 56),
-      ),
-      home: const RoomsScreen(),
+      debugShowCheckedModeBanner: false,
+      title: 'Chatapp',
+      theme: ThemeData.light(),
+      home: const OtpScreen(),
       routes: {
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
@@ -51,8 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        centerTitle: true,
       ),
-      body: Column(),
+      body: Center(child: Text(widget.title)),
     );
   }
 }
