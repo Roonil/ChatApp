@@ -1,4 +1,3 @@
-import 'package:chatapp/models/message.dart';
 import 'package:chatapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
