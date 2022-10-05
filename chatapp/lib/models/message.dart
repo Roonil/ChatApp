@@ -1,9 +1,10 @@
 class Message {
-  int id, threadId, userId, receiverId, roomId;
-  List<Message?> responses;
-  Message? responseTo;
-  String body;
-  DateTime createdAt = DateTime.now();
+  final int id, userId, receiverId, roomId;
+  int? threadId;
+  List<int?> responses = [];
+  int? responseTo;
+  final String body;
+  final DateTime createdAt = DateTime.now();
 
   Message({
     required this.roomId,
@@ -15,4 +16,13 @@ class Message {
     required this.id,
     required this.body,
   });
+
+  void createThread(int threadId, int replyId) {
+    this.threadId = threadId;
+    responses.add(replyId);
+  }
+
+  void isResponseTo(int parentMessageId) {
+    responseTo = parentMessageId;
+  }
 }

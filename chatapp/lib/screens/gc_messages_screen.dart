@@ -12,6 +12,19 @@ class GCMessagesScreen extends StatefulWidget {
 }
 
 class _GCMessagesScreenState extends State<GCMessagesScreen> {
+  int? parentId;
+
+  void replyTo(int id) {
+    Message replyingTo =
+        dummyMessages.firstWhere((message) => message.id == id);
+    if (replyingTo.threadId == null) {
+      replyingTo.createThread(1, 2);
+    }
+    setState(() {
+      parentId = id;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -25,20 +38,22 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         return;
       }
       setState(() {
-        dummyMessages.add(Message(
+        dummyMessages.add(
+          Message(
             roomId: roomId,
             userId: 1,
             receiverId: 2,
             responses: [],
             responseTo: null,
-            threadId: 1,
+            threadId: null,
             id: 2,
-            body: message));
+            body: message,
+          ),
+        );
       });
     }
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
@@ -51,6 +66,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         children: [
           Flexible(
             child: Messages(
+              replyTo: replyTo,
               messages: dummyMessages
                   .where((dummyMessage) => dummyMessage.roomId == roomId)
                   .toList(),
@@ -68,20 +84,50 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                   color: Theme.of(context)
                       .copyWith(brightness: Brightness.light)
                       .cardColor),
-              child: Row(
+              child: Column(
                 children: [
-                  Flexible(
-                    child: TextField(
-                      controller: messageController,
-                      decoration: const InputDecoration(
-                        hintText: "Message",
-                        border: InputBorder.none,
+                  parentId != null
+                      ? Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(top: 7),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white10,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            dummyMessages
+                                .firstWhere((message) => message.id == parentId)
+                                .body,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : Container(),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextField(
+                          focusNode: FocusNode(
+                            canRequestFocus: true,
+                          ),
+                          onSubmitted: (value) => sendMessage(),
+                          textInputAction: TextInputAction.go,
+                          controller: messageController,
+                          decoration: const InputDecoration(
+                            hintText: "Message",
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: sendMessage,
-                    icon: const Icon(Icons.send),
+                      IconButton(
+                        onPressed: sendMessage,
+                        icon: const Icon(
+                          Icons.send,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

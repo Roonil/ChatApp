@@ -8,16 +8,21 @@ import './screens/rooms_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: ((context) =>
-          Profile(id: 1, userId: 1, bio: "bio", userName: "userName")),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: ((context) =>
+              Profile(id: 1, userId: 1, bio: "bio", userName: "userName")),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              User(email: "email", password: "password", role: "role"),
+        ),
+      ],
+      child: const MyApp(),
     ),
-    ChangeNotifierProvider(
-      create: (context) =>
-          User(email: "email", password: "password", role: "role"),
-    ),
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatefulWidget {

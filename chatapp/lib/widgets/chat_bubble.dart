@@ -1,38 +1,21 @@
+import 'package:chatapp/models/message.dart';
 import 'package:chatapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PrefixConnector extends StatelessWidget {
-  const PrefixConnector({
+class Connector extends StatelessWidget {
+  final int? threadId;
+  final String connectorText;
+  const Connector({
     Key? key,
+    required this.connectorText,
+    required this.threadId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      "\u2500(12)\u2500\ue0b1",
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context)
-            .primaryTextTheme
-            .bodyMedium
-            ?.backgroundColor
-            ?.withAlpha(155),
-      ),
-    );
-  }
-}
-
-class SuffixConnector extends StatelessWidget {
-  const SuffixConnector({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "\ue0b3\u2500(12)\u2500",
+      connectorText,
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.bold,
@@ -48,10 +31,15 @@ class SuffixConnector extends StatelessWidget {
 
 class ChatBubble extends StatelessWidget {
   final String messageBody;
-  final int userId = 1, messageUserId;
+  final int messageUserId, messageId;
+  final int? threadId;
+  final void Function(int) replyTo;
   const ChatBubble({
     Key? key,
     required this.messageBody,
+    required this.messageId,
+    required this.replyTo,
+    required this.threadId,
     required this.messageUserId,
   }) : super(key: key);
 
@@ -65,9 +53,14 @@ class ChatBubble extends StatelessWidget {
           : MainAxisAlignment.end,
       children: [
         userId != messageUserId
-            ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: PrefixConnector(),
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Connector(
+                  connectorText: threadId == null
+                      ? "\u2500\u2500\u2500\ue0b1"
+                      : "\u2500($threadId)\u2500\ue0b1",
+                  threadId: threadId,
+                ),
               )
             : const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15),
@@ -94,14 +87,24 @@ class ChatBubble extends StatelessWidget {
             ),
           ),
         ),
-        userId == messageUserId
-            ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: SuffixConnector(),
+        userId != messageUserId
+            ? IconButton(
+                icon: const Icon(Icons.arrow_circle_right_outlined),
+                onPressed: (() => replyTo(messageId)),
               )
-            : const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-              )
+            : userId == messageUserId
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Connector(
+                      threadId: threadId,
+                      connectorText: threadId == null
+                          ? "\ue0b3\u2500\u2500\u2500"
+                          : "\ue0b3\u2500($threadId)\u2500",
+                    ),
+                  )
+                : const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                  )
       ],
     );
   }
