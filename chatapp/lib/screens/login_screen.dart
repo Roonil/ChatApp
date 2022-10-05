@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const RoomsScreen()));
+                                                 const RoomsScreen()));
                                   },
                                 ),
                               ),

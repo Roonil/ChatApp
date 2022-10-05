@@ -45,6 +45,7 @@ class NavDrawer extends StatelessWidget {
                     fontSize: 30,
                     color: Theme.of(context).textTheme.titleLarge?.color),
               ),
+
             ),
             createNavEntry(
                 context,
@@ -58,4 +59,5 @@ class NavDrawer extends StatelessWidget {
           ],
         ));
   }
+
 }
