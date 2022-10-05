@@ -1,18 +1,59 @@
+import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
 import '../widgets/messages.dart';
 import 'package:chatapp/dummy_messages.dart';
 
-class GCMessagesScreen extends StatelessWidget {
+class GCMessagesScreen extends StatefulWidget {
   static const routeName = "/messages";
   const GCMessagesScreen({Key? key}) : super(key: key);
+
+  @override
+  State<GCMessagesScreen> createState() => _GCMessagesScreenState();
+}
+
+class _GCMessagesScreenState extends State<GCMessagesScreen> {
+  int? parentId;
+
+  void replyTo(int id) {
+    Message replyingTo =
+        dummyMessages.firstWhere((message) => message.id == id);
+    if (replyingTo.threadId == null) {
+      replyingTo.createThread(1, 2);
+    }
+    setState(() {
+      parentId = id;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map;
     final int roomId = args['roomId'];
     final String roomName = args['roomName'];
+    final messageController = TextEditingController();
+
+    void sendMessage() {
+      final message = messageController.text;
+      if (message.isEmpty || message.trim().isEmpty) {
+        return;
+      }
+      setState(() {
+        dummyMessages.add(
+          Message(
+            roomId: roomId,
+            userId: 1,
+            receiverId: 2,
+            responses: [],
+            responseTo: null,
+            threadId: null,
+            id: 2,
+            body: message,
+          ),
+        );
+      });
+    }
+
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
@@ -21,12 +62,15 @@ class GCMessagesScreen extends StatelessWidget {
         ),
         title: Text(roomName),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Messages(
-            messages: dummyMessages
-                .where((dummyMessage) => dummyMessage.roomId == roomId)
-                .toList(),
+          Flexible(
+            child: Messages(
+              replyTo: replyTo,
+              messages: dummyMessages
+                  .where((dummyMessage) => dummyMessage.roomId == roomId)
+                  .toList(),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -40,12 +84,55 @@ class GCMessagesScreen extends StatelessWidget {
                   color: Theme.of(context)
                       .copyWith(brightness: Brightness.light)
                       .cardColor),
-              child: const TextField(
-                decoration: InputDecoration(
-                    hintText: "Message", border: InputBorder.none),
+              child: Column(
+                children: [
+                  parentId != null
+                      ? Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(top: 7),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 7),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white10,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            dummyMessages
+                                .firstWhere((message) => message.id == parentId)
+                                .body,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      : Container(),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: TextField(
+                          focusNode: FocusNode(
+                            canRequestFocus: true,
+                          ),
+                          onSubmitted: (value) => sendMessage(),
+                          textInputAction: TextInputAction.go,
+                          controller: messageController,
+                          decoration: const InputDecoration(
+                            hintText: "Message",
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: sendMessage,
+                        icon: const Icon(
+                          Icons.send,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
