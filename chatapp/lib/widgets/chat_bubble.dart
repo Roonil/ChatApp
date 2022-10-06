@@ -1,4 +1,4 @@
-import 'package:chatapp/models/user.dart';
+import 'package:chatapp/providers/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +44,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int userId = Provider.of<User>(context, listen: false).id;
+    final int userId = Provider.of<CurrentUser>(context, listen: false).user.id;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: userId != messageUserId

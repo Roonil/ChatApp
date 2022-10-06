@@ -1,10 +1,10 @@
 import 'package:chatapp/providers/users.dart';
+import 'package:chatapp/screens/user_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../providers/rooms.dart';
 import '../models/topic.dart';
-
 import '../widgets/rooms_list.dart';
 import '../widgets/nav_drawer.dart';
 import '../models/room.dart';
@@ -45,24 +45,44 @@ class _RoomsScreenState extends State<RoomsScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: const NavDrawer(),
       appBar: AppBar(
+        leading: Builder(builder: ((context) {
+          return IconButton(
+            onPressed: Scaffold.of(context).openDrawer,
+            icon: Icon(
+              Icons.menu,
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          );
+        })),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
         title: const Text("Rooms"),
-        actions: const [Icon(Icons.add)],
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
+            onPressed: (() => showModalBottomSheet(
+                context: context,
+                builder: (_) {
+                  return ModalAddNewRoom(
+                    addRoom: addNewRoom,
+                  );
+                })),
+          ),
+          IconButton(
+              onPressed: () => Navigator.pushNamed(
+                  context, UserScreen.routeName,
+                  arguments: {'id': 1}),
+              icon: Icon(
+                Icons.settings,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ))
+        ],
       ),
       body: const RoomsList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          showModalBottomSheet(
-              context: context,
-              builder: (_) {
-                return ModalAddNewRoom(
-                  addRoom: addNewRoom,
-                );
-              }),
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

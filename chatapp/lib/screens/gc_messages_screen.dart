@@ -27,6 +27,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
     });
   }
 
+//TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -68,9 +69,12 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
         leading: BackButton(
+          color: Theme.of(context).textTheme.bodySmall?.color,
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(roomName),
+        title: Text(
+          roomName,
+        ),
       ),
       body: Column(
         children: [

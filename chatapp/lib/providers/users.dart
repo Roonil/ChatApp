@@ -1,5 +1,6 @@
 import 'package:chatapp/providers/profiles.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import '../models/user.dart';
 
@@ -30,5 +31,16 @@ class Users extends ChangeNotifier {
 
   User withId(int id) {
     return _users.firstWhere((user) => user.id == id);
+  }
+
+  void register(User user) {
+    _users.add(user);
+    notifyListeners();
+  }
+
+  User? login(String email, String password) {
+    return _users.firstWhereOrNull(
+      (user) => user.email == email && user.password == password,
+    );
   }
 }

@@ -96,7 +96,8 @@ class _RoomsListState extends State<RoomsList> {
                   leading: const Icon(
                     Icons.people_alt_outlined,
                   ),
-                  title: const Text("0 Joined"),
+                  title: Text(
+                      "${rooms.at(index).members.length.toString()} Joined"), // const Text("0 Joined"),
                   trailing: Container(
                     width: 50,
                     height: 30,

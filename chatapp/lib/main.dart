@@ -9,6 +9,7 @@ import './screens/rooms_screen.dart';
 import 'package:provider/provider.dart';
 import './screens/gc_messages_screen.dart';
 
+import 'providers/current_user.dart';
 import 'providers/profiles.dart';
 
 void main() {
@@ -18,6 +19,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => Rooms()),
         ChangeNotifierProvider(create: (context) => Profiles()),
         ChangeNotifierProvider(create: (context) => Users()),
+        ChangeNotifierProvider(
+            create: (context) => CurrentUser(user: Users().withId(1))),
       ],
       child: const MyApp(),
     ),
@@ -35,6 +38,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ChatApp',
       theme: ThemeData(
         colorSchemeSeed: Colors.indigo[200],
@@ -44,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       home: const RoomsScreen(),
       routes: {
         GCMessagesScreen.routeName: (context) => const GCMessagesScreen(),
-        UserScreen.routeName: (context) => const UserScreen(userId: 1),
+        UserScreen.routeName: (context) => const UserScreen(),
         RoomsScreen.routeName: (context) => const RoomsScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
       },

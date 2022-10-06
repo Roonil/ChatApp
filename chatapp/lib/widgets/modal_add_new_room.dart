@@ -74,12 +74,15 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
           ),
         ),
       ),
-      const Padding(
-        padding: EdgeInsets.all(20),
-      ),
-      ElevatedButton(
-        onPressed: (() => _addRoom()),
-        child: const Text("Create Room"),
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: ElevatedButton(
+            onPressed: (() => _addRoom()),
+            child: const Text("Create Room"),
+          ),
+        ),
       ),
     ]);
   }
