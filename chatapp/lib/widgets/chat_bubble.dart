@@ -32,12 +32,12 @@ class ChatBubble extends StatelessWidget {
   final String messageBody;
   final int messageUserId, messageId;
   final int? threadId;
-  final void Function(int) replyTo;
+  final void Function(int) drawReplyBox;
   const ChatBubble({
     Key? key,
     required this.messageBody,
     required this.messageId,
-    required this.replyTo,
+    required this.drawReplyBox,
     required this.threadId,
     required this.messageUserId,
   }) : super(key: key);
@@ -89,7 +89,7 @@ class ChatBubble extends StatelessWidget {
         userId != messageUserId
             ? IconButton(
                 icon: const Icon(Icons.arrow_circle_right_outlined),
-                onPressed: (() => replyTo(messageId)),
+                onPressed: (() => drawReplyBox(messageId)),
               )
             : userId == messageUserId
                 ? Padding(

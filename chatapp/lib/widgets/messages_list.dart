@@ -2,21 +2,21 @@ import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
 import './chat_bubble.dart';
 
-class Messages extends StatefulWidget {
+class MessagesList extends StatefulWidget {
   final List<Message> messages;
-  final void Function(int) replyTo;
+  final void Function(int) drawReplyBox;
 
-  const Messages({
+  const MessagesList({
     Key? key,
-    required this.replyTo,
+    required this.drawReplyBox,
     required this.messages,
   }) : super(key: key);
 
   @override
-  State<Messages> createState() => _MessagesState();
+  State<MessagesList> createState() => _MessagesListState();
 }
 
-class _MessagesState extends State<Messages> {
+class _MessagesListState extends State<MessagesList> {
   @override
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _MessagesState extends State<Messages> {
           messageBody: widget.messages[index].body,
           messageUserId: widget.messages[index].userId,
           threadId: widget.messages[index].threadId,
-          replyTo: widget.replyTo,
+          drawReplyBox: widget.drawReplyBox,
         );
       },
       itemCount: widget.messages.length,

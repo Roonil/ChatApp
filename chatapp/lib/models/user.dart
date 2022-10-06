@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:chatapp/models/profile.dart';
 
-class User extends ChangeNotifier {
-  final int id = 1;
+class User {
+  final int id;
   final String email, password, role;
-  //profile
+  String name;
+  final Profile profile;
   final DateTime createdAt = DateTime.now();
   User({
+    required this.name,
+    required this.profile,
+    required this.id,
     required this.email,
     required this.password,
     required this.role,

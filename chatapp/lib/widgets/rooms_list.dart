@@ -1,6 +1,7 @@
 import 'package:chatapp/screens/gc_messages_screen.dart';
 import 'package:flutter/material.dart';
-import '../dummy_rooms.dart';
+import 'package:provider/provider.dart';
+import '../providers/rooms.dart';
 import 'package:intl/intl.dart';
 
 class RoomsList extends StatefulWidget {
@@ -15,6 +16,7 @@ class RoomsList extends StatefulWidget {
 class _RoomsListState extends State<RoomsList> {
   @override
   Widget build(BuildContext context) {
+    final Rooms rooms = Provider.of<Rooms>(context);
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Card(
@@ -31,15 +33,10 @@ class _RoomsListState extends State<RoomsList> {
                 context,
                 GCMessagesScreen.routeName,
                 arguments: {
-                  'roomId': dummyRooms[index].id,
-                  'roomName': dummyRooms[index].title,
+                  'roomId': rooms.at(index).id,
+                  'roomName': rooms.at(index).title,
                 },
               );
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   const SnackBar(
-              //     content: Text('Tap'),
-              //   ),
-              // );
             },
             child: Column(
               children: [
@@ -60,7 +57,7 @@ class _RoomsListState extends State<RoomsList> {
                       ),
                       Flexible(
                         child: Text(
-                          dummyRooms[index].title,
+                          rooms.at(index).title,
                           style: TextStyle(
                               fontSize: 19,
                               fontFamily: 'RobotoCondensed',
@@ -77,7 +74,7 @@ class _RoomsListState extends State<RoomsList> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        DateFormat.yMMMd().format(dummyRooms[index].createdAt),
+                        DateFormat.yMMMd().format(rooms.at(index).createdAt),
                         style: TextStyle(
                           color: Theme.of(context)
                               .primaryTextTheme
@@ -118,7 +115,7 @@ class _RoomsListState extends State<RoomsList> {
           ),
         );
       },
-      itemCount: dummyRooms.length,
+      itemCount: rooms.length(),
     );
   }
 }

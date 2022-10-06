@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
-class Profile extends ChangeNotifier {
+class Profile {
   final int id, userId;
-  final String bio, userName;
+  final String userName;
+  String bio;
   final DateTime createdAt = DateTime.now();
 
   Profile({

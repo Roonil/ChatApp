@@ -7,7 +7,7 @@ final dummyMessages = [
       receiverId: 1,
       responses: [],
       responseTo: null,
-      threadId: 4,
+      threadId: null,
       id: 4,
       body: "First Message"),
   Message(

@@ -7,6 +7,7 @@ import '../common/theme_helper.dart';
 import '../widgets/header_widget.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = "/login";
   const LoginScreen({Key? key}) : super(key: key);
 
   @override

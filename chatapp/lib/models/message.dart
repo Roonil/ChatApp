@@ -17,7 +17,7 @@ class Message {
     required this.body,
   });
 
-  void createThread(int threadId, int replyId) {
+  void createThread(int? threadId, int replyId) {
     this.threadId = threadId;
     responses.add(replyId);
   }

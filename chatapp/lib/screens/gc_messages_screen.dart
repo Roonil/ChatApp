@@ -1,7 +1,13 @@
+import 'dart:math';
+
 import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
-import '../widgets/messages.dart';
+import '../widgets/messages_list.dart';
 import 'package:chatapp/dummy_messages.dart';
+
+int generateMessageId() {
+  return Random().nextInt(10);
+}
 
 class GCMessagesScreen extends StatefulWidget {
   static const routeName = "/messages";
@@ -13,13 +19,9 @@ class GCMessagesScreen extends StatefulWidget {
 
 class _GCMessagesScreenState extends State<GCMessagesScreen> {
   int? parentId;
+  int? threadId;
 
-  void replyTo(int id) {
-    Message replyingTo =
-        dummyMessages.firstWhere((message) => message.id == id);
-    if (replyingTo.threadId == null) {
-      replyingTo.createThread(1, 2);
-    }
+  void drawReplyBox(int? id) {
     setState(() {
       parentId = id;
     });
@@ -38,14 +40,22 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         return;
       }
       setState(() {
+        if (parentId != null) {
+          Message replyingTo =
+              dummyMessages.firstWhere((message) => message.id == parentId);
+          int messageId = generateMessageId();
+
+          threadId = replyingTo.threadId ?? 1;
+          replyingTo.createThread(threadId, messageId);
+        }
         dummyMessages.add(
           Message(
             roomId: roomId,
             userId: 1,
             receiverId: 2,
             responses: [],
-            responseTo: null,
-            threadId: null,
+            responseTo: parentId,
+            threadId: threadId,
             id: 2,
             body: message,
           ),
@@ -65,8 +75,8 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
       body: Column(
         children: [
           Flexible(
-            child: Messages(
-              replyTo: replyTo,
+            child: MessagesList(
+              drawReplyBox: drawReplyBox,
               messages: dummyMessages
                   .where((dummyMessage) => dummyMessage.roomId == roomId)
                   .toList(),
