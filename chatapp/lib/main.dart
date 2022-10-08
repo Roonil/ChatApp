@@ -1,6 +1,10 @@
+import 'package:chatapp/providers/dummy_messages.dart';
 import 'package:chatapp/providers/rooms.dart';
 import 'package:chatapp/providers/users.dart';
+import 'package:chatapp/screens/room_info_screen.dart';
+
 import 'package:chatapp/screens/user_screen.dart';
+
 import 'package:flutter/material.dart';
 
 import './screens/login_screen.dart';
@@ -19,6 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => Rooms()),
         ChangeNotifierProvider(create: (context) => Profiles()),
         ChangeNotifierProvider(create: (context) => Users()),
+        ChangeNotifierProvider(create: (context) => Messages()),
         ChangeNotifierProvider(
             create: (context) => CurrentUser(user: Users().withId(1))),
       ],
@@ -41,14 +46,19 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'ChatApp',
       theme: ThemeData(
-        colorSchemeSeed: Colors.indigo[200],
+        //colorSchemeSeed: Colors.indigo[200],
+        // colorSchemeSeed: const Color.fromARGB(255, 131, 9, 153),
+        colorSchemeSeed: Colors.purple,
         brightness: Brightness.dark,
         useMaterial3: true,
+      ).copyWith(
+        backgroundColor: const Color.fromARGB(255, 57, 41, 60),
       ),
       home: const RoomsScreen(),
       routes: {
         GCMessagesScreen.routeName: (context) => const GCMessagesScreen(),
         UserScreen.routeName: (context) => const UserScreen(),
+        RoomInfoScreen.routeName: (context) => const RoomInfoScreen(),
         RoomsScreen.routeName: (context) => const RoomsScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
       },

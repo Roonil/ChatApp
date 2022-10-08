@@ -1,6 +1,5 @@
 import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import './chat_bubble.dart';
 
 class MessagesList extends StatefulWidget {
@@ -24,13 +23,11 @@ class _MessagesListState extends State<MessagesList> {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return ChatBubble(
-          message: widget.messages[index],
+          messageId: widget.messages[index].id,
+          messageBody: widget.messages[index].body,
+          messageUserId: widget.messages[index].userId,
+          threadId: widget.messages[index].threadId,
           drawReplyBox: widget.drawReplyBox,
-          replyTo:
-              //     index == widget.messages.length - 1 || widget.messages.isEmpty
-              //         ? null
-              widget.messages.firstWhereOrNull(
-                  (message) => message.id == widget.messages[index].responseTo),
         );
       },
       itemCount: widget.messages.length,

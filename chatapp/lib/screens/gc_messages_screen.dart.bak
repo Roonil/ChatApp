@@ -3,9 +3,8 @@ import 'dart:math';
 import 'package:chatapp/models/message.dart';
 import 'package:chatapp/screens/room_info_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../widgets/messages_list.dart';
-import 'package:chatapp/providers/dummy_messages.dart';
+import 'package:chatapp/dummy_messages.dart';
 
 int generateMessageId() {
   return Random().nextInt(10);
@@ -32,7 +31,6 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
 //TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
-    final dummyMessages = Provider.of<Messages>(context);
     final args = ModalRoute.of(context)?.settings.arguments as Map;
     final int roomId = args['roomId'];
     final String roomName = args['roomName'];
@@ -45,7 +43,8 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
       }
       setState(() {
         if (parentId != null) {
-          Message replyingTo = dummyMessages.withId(parentId as int);
+          Message replyingTo =
+              dummyMessages.firstWhere((message) => message.id == parentId);
           int messageId = generateMessageId();
 
           threadId = replyingTo.threadId ?? 1;
@@ -94,8 +93,11 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         children: [
           Flexible(
             child: MessagesList(
-                drawReplyBox: drawReplyBox,
-                messages: dummyMessages.inRoom(roomId)),
+              drawReplyBox: drawReplyBox,
+              messages: dummyMessages
+                  .where((dummyMessage) => dummyMessage.roomId == roomId)
+                  .toList(),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -123,7 +125,9 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            dummyMessages.withId(parentId as int).body,
+                            dummyMessages
+                                .firstWhere((message) => message.id == parentId)
+                                .body,
                             overflow: TextOverflow.ellipsis,
                           ),
                         )

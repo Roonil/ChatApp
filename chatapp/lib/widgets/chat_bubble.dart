@@ -1,110 +1,236 @@
 import 'package:chatapp/providers/current_user.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timelines/timelines.dart';
+
+import '../models/message.dart';
+
+enum Mode {
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+}
 
 class Connector extends StatelessWidget {
-  final int? threadId;
-  final String connectorText;
+  final Mode mode;
   const Connector({
-    Key? key,
-    required this.connectorText,
-    required this.threadId,
-  }) : super(key: key);
+    super.key,
+    required this.mode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      connectorText,
-      style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context)
-            .primaryTextTheme
-            .bodyMedium
-            ?.backgroundColor
-            ?.withAlpha(155),
-      ),
+    final TextStyle textStyle = TextStyle(
+        fontFamily: "FiraCode",
+        fontSize: 16,
+        color: Colors.grey.withAlpha(255),
+        fontWeight: FontWeight.normal);
+
+    if (mode == Mode.topLeft) {
+      return Flexible(
+          child: Column(
+        children: [
+          Text(
+            "╭",
+            style: textStyle,
+          ),
+          Text(
+            "\u2502",
+            style: textStyle.copyWith(height: 0.9),
+          ),
+        ],
+      ));
+    } else if (mode == Mode.bottomLeft) {
+      return Flexible(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "╰",
+              style: textStyle,
+            ),
+          ],
+        ),
+      );
+    } else if (mode == Mode.topRight) {
+      return Flexible(
+          child: Column(
+        children: [
+          Text(
+            "╮",
+            style: textStyle,
+          ),
+          Text("\u2502", style: textStyle.copyWith(height: 0.9)),
+        ],
+      ));
+    } else {
+      return Flexible(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "╯",
+              style: textStyle,
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}
+
+class BubbleBody extends StatelessWidget {
+  final String body;
+  final bool isParent;
+  final double? bottomMargin;
+
+  const BubbleBody(
+      {super.key,
+      this.bottomMargin,
+      required this.isParent,
+      required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints:
+          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
+      child: Card(
+          color: isParent ? Colors.deepPurple : Theme.of(context).cardColor,
+          margin: EdgeInsets.only(
+              bottom: bottomMargin ?? 4, top: 4, left: 4, right: 4),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
+            child: Text(
+              maxLines: isParent ? 1 : null,
+              overflow: isParent ? TextOverflow.ellipsis : null,
+              body,
+              style: const TextStyle(fontSize: 16),
+            ),
+          )),
     );
   }
 }
 
 class ChatBubble extends StatelessWidget {
-  final String messageBody;
-  final int messageUserId, messageId;
-  final int? threadId;
+  final Message message;
+  // final Message? nextMessage;
+  final Message? replyTo;
   final void Function(int) drawReplyBox;
-  const ChatBubble({
-    Key? key,
-    required this.messageBody,
-    required this.messageId,
+  late String messageBody;
+  late int messageUserId, messageId;
+  late int? threadId;
+
+  ChatBubble({
+    super.key,
+    //  required this.nextMessage,
+    required this.replyTo,
+    required this.message,
     required this.drawReplyBox,
-    required this.threadId,
-    required this.messageUserId,
-  }) : super(key: key);
+    this.threadId,
+  }) {
+    messageBody = message.body;
+    messageId = message.id;
+    threadId = message.threadId;
+    messageUserId = message.userId;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final int userId = Provider.of<CurrentUser>(context, listen: false).user.id;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: userId != messageUserId
-          ? MainAxisAlignment.start
-          : MainAxisAlignment.end,
-      children: [
-        userId != messageUserId
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Connector(
-                  connectorText: threadId == null
-                      ? "\u2500\u2500\u2500\ue0b1"
-                      : "\u2500($threadId)\u2500\ue0b1",
-                  threadId: threadId,
-                ),
-              )
-            : const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
-              ),
-        Container(
-          constraints: BoxConstraints(
-            maxWidth: 60 * MediaQuery.of(context).size.width / 100,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 3),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            color: Colors.black38,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                messageBody,
-                style: TextStyle(
-                    fontSize: 17,
-                    color:
-                        Theme.of(context).primaryTextTheme.bodyMedium?.color),
-              ),
-            ),
-          ),
-        ),
-        userId != messageUserId
-            ? IconButton(
-                icon: const Icon(Icons.arrow_circle_right_outlined),
-                onPressed: (() => drawReplyBox(messageId)),
-              )
-            : userId == messageUserId
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Connector(
-                      threadId: threadId,
-                      connectorText: threadId == null
-                          ? "\ue0b3\u2500\u2500\u2500"
-                          : "\ue0b3\u2500($threadId)\u2500",
-                    ),
-                  )
-                : const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                  )
-      ],
+    final TextStyle textStyle = TextStyle(
+      fontSize: 16,
+      letterSpacing: -2,
+      fontFamily: "FiraCode",
+      fontWeight: FontWeight.normal,
+      color: Colors.grey.withAlpha(255),
     );
+    final userId = Provider.of<CurrentUser>(context).user.id;
+    final MainAxisAlignment mainAxisAlignment = userId == messageUserId
+        ? MainAxisAlignment.end
+        : MainAxisAlignment.start;
+    return replyTo == null
+        ? Row(
+            textBaseline: TextBaseline.alphabetic,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            mainAxisAlignment: mainAxisAlignment,
+            children: [
+              BubbleBody(
+                body: messageBody,
+                bottomMargin: 14,
+                isParent: false,
+              ),
+              messageUserId == userId
+                  ? Container()
+                  : IconButton(
+                      icon: const Icon(Icons.arrow_circle_right_outlined),
+                      onPressed: (() => drawReplyBox(messageId)),
+                    )
+            ],
+          )
+        : Column(children: [
+            Row(
+              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                messageUserId == userId
+                    ? Container()
+                    : const Connector(
+                        mode: Mode.topLeft,
+                      ),
+                messageUserId == userId
+                    ? Container()
+                    : Text(
+                        "─",
+                        style: textStyle,
+                      ),
+                BubbleBody(
+                  body: replyTo?.body as String,
+                  isParent: true,
+                ),
+                messageUserId == userId
+                    ? Text(
+                        "─",
+                        style: textStyle,
+                      )
+                    : Container(),
+                messageUserId == userId
+                    ? const Connector(mode: Mode.topRight)
+                    : Container(),
+              ],
+            ),
+            Row(
+              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                userId == messageUserId
+                    ? Container()
+                    : const Connector(mode: Mode.bottomLeft),
+                userId == messageUserId
+                    ? Container()
+                    : Text(
+                        "\u2500\u2500\ue0b1",
+                        style: textStyle,
+                      ),
+                BubbleBody(
+                  body: messageBody,
+                  bottomMargin: 14,
+                  isParent: false,
+                ),
+                userId == messageUserId
+                    ? Text(
+                        "\ue0b3\u2500\u2500",
+                        style: textStyle,
+                      )
+                    : Container(),
+                userId == messageUserId
+                    ? const Connector(mode: Mode.bottomRight)
+                    : Container(),
+              ],
+            )
+          ]);
   }
 }

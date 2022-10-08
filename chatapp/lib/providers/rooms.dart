@@ -29,6 +29,10 @@ class Rooms with ChangeNotifier {
         description: "Description 1"),
   ];
 
+  Room withId(int id) {
+    return _rooms.firstWhere((room) => room.id == id);
+  }
+
   Room at(int index) {
     return _rooms[index];
   }

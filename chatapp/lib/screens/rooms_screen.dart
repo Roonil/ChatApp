@@ -60,6 +60,13 @@ class _RoomsScreenState extends State<RoomsScreen> {
         title: const Text("Rooms"),
         actions: [
           IconButton(
+              onPressed: null,
+              //TODO: Implement Search Function
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              )),
+          IconButton(
             icon: Icon(
               Icons.add,
               color: Theme.of(context).textTheme.bodySmall?.color,
