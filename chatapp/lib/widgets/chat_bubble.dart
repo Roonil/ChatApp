@@ -2,7 +2,7 @@ import 'package:chatapp/providers/current_user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:timelines/timelines.dart';
+
 
 import '../models/message.dart';
 

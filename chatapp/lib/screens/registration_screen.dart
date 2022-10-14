@@ -188,12 +188,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               if (_formKey.currentState!.validate()) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-<<<<<<< HEAD
-                                        builder: (context) =>  const RoomsScreen()),
-=======
                                         builder: (context) =>
                                             const RoomsScreen()),
->>>>>>> main
                                     (Route<dynamic> route) => false);
                               }
                             },
