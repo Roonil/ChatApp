@@ -57,16 +57,7 @@ class Connector extends StatelessWidget {
             "\u2500╮",
             style: textStyle,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                " ",
-                style: textStyle,
-              ),
-              Text("\u2502", style: textStyle.copyWith(height: 0.9)),
-            ],
-          ),
+          Text(" \u2502", style: textStyle.copyWith(height: 0.9)),
         ],
       ));
     } else {
