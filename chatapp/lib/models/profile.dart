@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-class profile{
-
-}
-=======
 class Profile {
   final int id, userId;
   final String userName;
@@ -16,4 +11,3 @@ class Profile {
     required this.userName,
   });
 }
->>>>>>> main
