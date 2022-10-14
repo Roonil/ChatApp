@@ -1,0 +1,142 @@
+import 'package:flutter/material.dart';
+
+class Connector extends StatelessWidget {
+  final String connectorText;
+  final bool isTopHalf;
+  const Connector({
+    Key? key,
+    required this.connectorText,
+    required this.isTopHalf,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment:
+          isTopHalf ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        isTopHalf
+            ? Container()
+            : const Text(
+                "|",
+                style: TextStyle(
+                  height: 0.01,
+                  fontSize: 16,
+                  fontFamily: "FiraCode",
+                  fontWeight: FontWeight.normal,
+                  color: Colors.grey,
+                ),
+              ),
+        Row(
+          children: [
+            Text(
+              connectorText,
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: "FiraCode",
+                fontWeight: FontWeight.normal,
+                color: Colors.grey,
+              ),
+            ),
+            isTopHalf
+                ? Card(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    color: Colors.deepPurple,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 2.5),
+                      child: Text(
+                        "LONG LONG LONG MESSAGE",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context)
+                                .primaryTextTheme
+                                .bodySmall
+                                ?.color),
+                      ),
+                    ),
+                  )
+                : Container()
+          ],
+        ),
+        isTopHalf
+            ? const Text(
+                "|",
+                style: TextStyle(
+                  height: 0.01,
+                  fontSize: 16,
+                  fontFamily: "FiraCode",
+                  fontWeight: FontWeight.normal,
+                  color: Colors.grey,
+                ),
+              )
+            : Container()
+      ],
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  final String body;
+  final bool isMine;
+  const ChatBubble({super.key, required this.body, required this.isMine});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        mainAxisAlignment:
+            isMine ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
+        crossAxisAlignment:
+            isMine ? CrossAxisAlignment.end : CrossAxisAlignment.center,
+        children: [
+          isMine
+              ? const Connector(
+                  connectorText: "╭─",
+                  isTopHalf: true,
+                )
+              : const Connector(
+                  connectorText: "╰─\u2500\ue0b1",
+                  isTopHalf: false,
+                ),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 60 * MediaQuery.of(context).size.width / 100,
+            ),
+            //padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              color: Colors.black38,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
+                child: Text(
+                  body,
+                  style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          Theme.of(context).primaryTextTheme.bodyMedium?.color),
+                ),
+              ),
+            ),
+          ),
+        ]);
+  }
+}
+
+class TestConnector extends StatelessWidget {
+  const TestConnector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text("Demo")),
+        body: Column(children: const [
+          ChatBubble(body: "Sup?", isMine: true),
+          ChatBubble(body: "Yoii", isMine: false),
+        ]));
+  }
+}

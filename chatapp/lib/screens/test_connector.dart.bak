@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+
+class Connector extends StatelessWidget {
+  final String connectorText;
+  final bool isTopHalf;
+  const Connector({
+    Key? key,
+    required this.connectorText,
+    required this.isTopHalf,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment:
+          isTopHalf ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        isTopHalf
+            ? Container()
+            : Text(
+                "|",
+                style: TextStyle(
+                  height: 0.15625,
+                  fontSize: 16,
+                  fontFamily: "FiraCode",
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.backgroundColor
+                      ?.withAlpha(155),
+                ),
+              ),
+        Text(
+          connectorText,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: "FiraCode",
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context)
+                .primaryTextTheme
+                .bodyMedium
+                ?.backgroundColor
+                ?.withAlpha(155),
+          ),
+        ),
+        isTopHalf
+            ? Text(
+                "|",
+                style: TextStyle(
+                  height: 0.15625,
+                  fontSize: 16,
+                  fontFamily: "FiraCode",
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyMedium
+                      ?.backgroundColor
+                      ?.withAlpha(155),
+                ),
+              )
+            : Container()
+      ],
+    );
+  }
+}
+
+class ChatBubble extends StatelessWidget {
+  final String body;
+  final bool isMine;
+  const ChatBubble({super.key, required this.body, required this.isMine});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        mainAxisAlignment:
+            isMine ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
+        crossAxisAlignment:
+            isMine ? CrossAxisAlignment.end : CrossAxisAlignment.center,
+        children: [
+          isMine
+              ? const Connector(
+                  connectorText: "╭─",
+                  isTopHalf: true,
+                )
+              : const Connector(
+                  connectorText: "╰─(1)\u2500\ue0b1",
+                  isTopHalf: false,
+                ),
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: 60 * MediaQuery.of(context).size.width / 100,
+            ),
+            //padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              color: Colors.black38,
+              child: Column(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text(
+                      body,
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyMedium
+                              ?.color),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ]);
+  }
+}
+
+class TestConnector extends StatelessWidget {
+  const TestConnector({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text("Demo")),
+        body: Column(children: const [
+          ChatBubble(body: "yoo", isMine: true),
+          ChatBubble(body: "body", isMine: false),
+        ]));
+  }
+}
