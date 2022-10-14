@@ -109,49 +109,16 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                   color: Theme.of(context)
                       .copyWith(brightness: Brightness.light)
                       .cardColor),
-              child: Column(
-                children: [
-                  parentId != null
-                      ? Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 7),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 7),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white10,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            dummyMessages.withId(parentId as int).body,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      : Container(),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          focusNode: FocusNode(
-                            canRequestFocus: true,
-                          ),
-                          onSubmitted: (value) => sendMessage(),
-                          textInputAction: TextInputAction.go,
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            hintText: "Message",
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: sendMessage,
-                        icon: const Icon(
-                          Icons.send,
-                        ),
-                      ),
-                    ],
+              child: Row(
+                children: const [
+                  TextField(
+                    decoration: InputDecoration(
+                        hintText: "Message", border: InputBorder.none),
                   ),
+                  FloatingActionButton(
+                    onPressed: null,
+                    child: Icon(Icons.send),
+                  )
                 ],
               ),
             ),
