@@ -1,0 +1,18 @@
+import 'package:chatapp/models/topic.dart';
+import 'package:flutter/material.dart';
+
+class Topics {
+  final List<Topic> _topics = [
+    Topic(name: "C++", id: 1),
+    Topic(name: "Java", id: 2),
+    Topic(name: "Python", id: 3),
+  ];
+
+  Topic at(int index) {
+    return _topics[index];
+  }
+
+  void add(Topic topic) {
+    _topics.add(topic);
+  }
+}
