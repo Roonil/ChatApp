@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Topic {
   final int id = 1;
   final String name;
@@ -8,4 +10,8 @@ class Topic {
     required this.name,
     //required this.rooms,
   });
+
+  Widget getPill() {
+    return Container();
+  }
 }
