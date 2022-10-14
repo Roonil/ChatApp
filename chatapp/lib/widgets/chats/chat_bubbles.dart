@@ -1,5 +1,3 @@
-import 'package:swipe_to/swipe_to.dart';
-
 import '../../providers/current_user.dart';
 
 import 'package:flutter/material.dart';
