@@ -62,6 +62,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -86,6 +93,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.5"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   intl:
     dependency: "direct main"
     description:
@@ -149,6 +170,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.3"
+  search_page:
+    dependency: "direct main"
+    description:
+      name: search_page
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   simple_animations:
     dependency: "direct main"
     description:
@@ -189,6 +217,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  swipe_to:
+    dependency: "direct main"
+    description:
+      name: swipe_to
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   term_glyph:
     dependency: transitive
     description:
@@ -203,6 +238,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
+  timelines:
+    dependency: "direct main"
+    description:
+      name: timelines
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
+  typed_data:
+    dependency: transitive
+    description:
+      name: typed_data
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   vector_math:
     dependency: transitive
     description:
@@ -211,5 +260,5 @@ packages:
     source: hosted
     version: "2.1.2"
 sdks:
-  dart: ">=2.17.5 <3.0.0"
-  flutter: ">=2.0.1"
+  dart: ">=2.18.0 <3.0.0"
+  flutter: ">=3.3.0"
