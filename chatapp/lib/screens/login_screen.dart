@@ -7,9 +7,11 @@ import '../common/theme_helper.dart';
 import '../widgets/header_widget.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = "/login";
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -117,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
                                   const TextSpan(
-                                      text: "Don\'t have an account? "),
+                                      text: "Don't have an account? "),
                                   TextSpan(
                                     text: 'Create',
                                     recognizer: TapGestureRecognizer()

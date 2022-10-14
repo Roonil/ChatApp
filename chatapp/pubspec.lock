@@ -43,6 +43,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+<<<<<<< HEAD
   curved_navigation_bar:
     dependency: "direct main"
     description:
@@ -50,6 +51,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.7"
+=======
+>>>>>>> main
   fake_async:
     dependency: transitive
     description:
@@ -86,6 +89,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "10.2.1"
+<<<<<<< HEAD
   google_nav_bar:
     dependency: "direct main"
     description:
@@ -93,6 +97,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.6"
+=======
+>>>>>>> main
   hexcolor:
     dependency: "direct main"
     description:
@@ -142,6 +148,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+<<<<<<< HEAD
+=======
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
+>>>>>>> main
   path:
     dependency: transitive
     description:
@@ -149,6 +165,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
+<<<<<<< HEAD
+=======
+  provider:
+    dependency: "direct main"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.3"
+>>>>>>> main
   simple_animations:
     dependency: "direct main"
     description:
@@ -203,6 +229,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
+<<<<<<< HEAD
+=======
+  timelines:
+    dependency: "direct main"
+    description:
+      name: timelines
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
+>>>>>>> main
   vector_math:
     dependency: transitive
     description:

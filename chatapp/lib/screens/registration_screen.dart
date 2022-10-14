@@ -1,9 +1,5 @@
 import 'package:chatapp/screens/rooms_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import '../common/theme_helper.dart';
 import '../widgets/header_widget.dart';
@@ -29,13 +25,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(
+            const SizedBox(
               height: 150,
               child: HeaderWidget(150, false, Icons.app_registration_rounded),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 50, 25, 10),
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -47,17 +43,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: Stack(
                             children: [
                               Container(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
                                   border:
                                       Border.all(width: 5, color: Colors.white),
                                   color: Colors.white,
-                                  boxShadow: [
+                                  boxShadow: const [
                                     BoxShadow(
                                       color: Colors.black12,
                                       blurRadius: 20,
-                                      offset: const Offset(5, 5),
+                                      offset: Offset(5, 5),
                                     ),
                                   ],
                                 ),
@@ -68,7 +64,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.fromLTRB(80, 80, 0, 0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(80, 80, 0, 0),
                                 child: Icon(
                                   Icons.add_circle,
                                   color: Colors.grey.shade700,
@@ -78,15 +75,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ],
                           ),
                         ),
-
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         Container(
+                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
                           child: TextFormField(
                             decoration: ThemeHelper().textInputDecoration(
                                 "E-mail address", "Enter your email"),
                             keyboardType: TextInputType.emailAddress,
                             validator: (val) {
-                              if (!(val!.isEmpty) &&
+                              if ((val!.isNotEmpty) &&
                                   !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
                                       .hasMatch(val)) {
                                 return "Enter a valid email address";
@@ -94,7 +91,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               return null;
                             },
                           ),
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
                         // SizedBox(height: 20.0),
                         // Container(
@@ -127,7 +123,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         //   ),
                         //   decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         // ),
-                        SizedBox(height: 15.0),
+                        const SizedBox(height: 15.0),
                         FormField<bool>(
                           builder: (state) {
                             return Column(
@@ -142,7 +138,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                             state.didChange(value);
                                           });
                                         }),
-                                    Text(
+                                    const Text(
                                       "I accept all terms and conditions.",
                                       style: TextStyle(color: Colors.grey),
                                     ),
@@ -170,7 +166,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             }
                           },
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         Container(
                           decoration:
                               ThemeHelper().buttonBoxDecoration(context),
@@ -181,7 +177,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   const EdgeInsets.fromLTRB(40, 10, 40, 10),
                               child: Text(
                                 "Register".toUpperCase(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -192,7 +188,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               if (_formKey.currentState!.validate()) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
+<<<<<<< HEAD
                                         builder: (context) =>  const RoomsScreen()),
+=======
+                                        builder: (context) =>
+                                            const RoomsScreen()),
+>>>>>>> main
                                     (Route<dynamic> route) => false);
                               }
                             },
