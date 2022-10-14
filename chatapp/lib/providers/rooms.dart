@@ -1,8 +1,8 @@
-import 'package:chatapp/models/topic.dart';
+import '../models/topic.dart';
 import 'package:flutter/material.dart';
 
 import './users.dart';
-import '../models/room.dart';
+import 'room.dart';
 
 class Rooms with ChangeNotifier {
   final List<Room> _rooms = [
@@ -11,7 +11,7 @@ class Rooms with ChangeNotifier {
         hostId: 1,
         title: "Let's learn C++!",
         members: [Users().withId(1)],
-        topics: [Topic(name: "C++")],
+        topics: [Topic(name: "C++"), Topic(name: "Java")],
         description: "Description 1"),
     Room(
         id: 2,
@@ -41,8 +41,17 @@ class Rooms with ChangeNotifier {
     return _rooms.length;
   }
 
+  void deleteRoomWithID(int id) {
+    _rooms.removeWhere((room) => room.id == id);
+    notifyListeners();
+  }
+
   void addRoom(Room room) {
     _rooms.add(room);
     notifyListeners();
+  }
+
+  List<Room> listify() {
+    return _rooms;
   }
 }
