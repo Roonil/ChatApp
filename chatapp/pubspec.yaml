@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.0.4
   search_page: ^2.2.0
   hexcolor: ^3.0.1
+  term_glyph: ^1.2.1
 
 dev_dependencies:
   flutter_test:

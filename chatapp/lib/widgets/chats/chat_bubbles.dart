@@ -33,14 +33,15 @@ class ChatBubbles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userId = Provider.of<CurrentUser>(context).user.id;
-    final MainAxisAlignment mainAxisAlignment = userId == messageUserId
-        ? MainAxisAlignment.end
-        : MainAxisAlignment.start;
+    const MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start;
+    final textDirection =
+        messageUserId == userId ? TextDirection.rtl : TextDirection.ltr;
     return replyTo == null
         ? Row(
             textBaseline: TextBaseline.alphabetic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             mainAxisAlignment: mainAxisAlignment,
+            textDirection: textDirection,
             children: [
               SwipeTo(
                 onRightSwipe: () {
@@ -56,12 +57,13 @@ class ChatBubbles extends StatelessWidget {
           )
         : Column(children: [
             Row(
+              textDirection: textDirection,
               textBaseline: TextBaseline.alphabetic,
               crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: mainAxisAlignment,
               children: [
                 messageUserId == userId
-                    ? Container()
+                    ? const Connector(mode: Mode.topRight)
                     : const Connector(
                         mode: Mode.topLeft,
                       ),
@@ -69,18 +71,16 @@ class ChatBubbles extends StatelessWidget {
                   body: replyTo?.body as String,
                   isParent: true,
                 ),
-                messageUserId == userId
-                    ? const Connector(mode: Mode.topRight)
-                    : Container(),
               ],
             ),
             Row(
+              textDirection: textDirection,
               textBaseline: TextBaseline.alphabetic,
               crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: mainAxisAlignment,
               children: [
                 userId == messageUserId
-                    ? Container()
+                    ? const Connector(mode: Mode.bottomRight)
                     : const Connector(mode: Mode.bottomLeft),
                 SwipeTo(
                   onRightSwipe: () {
@@ -92,9 +92,6 @@ class ChatBubbles extends StatelessWidget {
                     isParent: false,
                   ),
                 ),
-                userId == messageUserId
-                    ? const Connector(mode: Mode.bottomRight)
-                    : Container(),
               ],
             )
           ]);

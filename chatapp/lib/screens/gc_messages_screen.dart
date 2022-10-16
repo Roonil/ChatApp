@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:chatapp/models/message.dart';
 import 'package:chatapp/screens/room_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
 import 'package:provider/provider.dart';
 import '../widgets/chats/bubble_body.dart';
 import '../widgets/chats/messages_list.dart';
@@ -37,6 +39,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
     final int roomId = args['roomId'];
     final String roomName = args['roomName'];
     final messageController = TextEditingController();
+    final messageListController = ScrollController();
 
     void sendMessage() {
       final message = messageController.text;
@@ -50,6 +53,8 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
 
           threadId = replyingTo.threadId ?? 1;
           replyingTo.createThread(threadId, messageId);
+          //messageListController
+          //  .jumpTo(messageListController.position.maxScrollExtent);
         }
         messages.add(
           Message(
@@ -64,56 +69,65 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
           ),
         );
         parentId = null;
+        // SchedulerBinding.instance.addPostFrameCallback((_) {
+        messageListController
+            .jumpTo(messageListController.position.minScrollExtent);
+        //   });
       });
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 3,
-        leading: BackButton(
-          color: Theme.of(context).textTheme.bodySmall?.color,
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
-              arguments: {'roomId': roomId}),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                roomName,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 3,
+          leading: BackButton(
+            color: Theme.of(context).textTheme.bodySmall?.color,
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
+                arguments: {'roomId': roomId}),
+            child: SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  roomName,
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
+        body: Column(children: [
           Flexible(
             child: MessagesList(
-                drawReplyBox: drawReplyBox, messages: messages.inRoom(roomId)),
+                messageListController: messageListController,
+                drawReplyBox: drawReplyBox,
+                messages: messages.inRoom(roomId)),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
+          Flexible(
+            flex: 0,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 parentId != null
-                    ? Row(
-                        children: [
-                          BubbleBody(
-                              isParent: true,
-                              body: messages.withId(parentId as int).body),
-                          IconButton(
-                              icon: const Icon(Icons.cancel_outlined),
-                              onPressed: () => setState(() {
-                                    parentId = null;
-                                  })),
-                        ],
+                    ? Flexible(
+                        flex: 0,
+                        child: Row(
+                          children: [
+                            BubbleBody(
+                                isParent: true,
+                                body: messages.withId(parentId as int).body),
+                            IconButton(
+                                icon: const Icon(Icons.cancel_outlined),
+                                onPressed: () => setState(() {
+                                      parentId = null;
+                                    })),
+                          ],
+                        ),
                       )
                     : Container(),
                 Container(
@@ -127,40 +141,29 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                       color: Theme.of(context)
                           .copyWith(brightness: Brightness.light)
                           .cardColor),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextField(
-                              focusNode: FocusNode(
-                                canRequestFocus: true,
-                              ),
-                              onSubmitted: (value) => sendMessage(),
-                              textInputAction: TextInputAction.go,
-                              controller: messageController,
-                              decoration: const InputDecoration(
-                                hintText: "Message",
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: sendMessage,
-                            icon: const Icon(
-                              Icons.send,
-                            ),
-                          ),
-                        ],
+                  child: TextField(
+                    // focusNode: FocusNode(
+                    //   canRequestFocus: true,
+                    // ),
+                    onSubmitted: (value) => sendMessage(),
+                    onEditingComplete: () {},
+                    textInputAction: TextInputAction.go,
+                    controller: messageController,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: sendMessage,
+                        icon: const Icon(
+                          Icons.send,
+                        ),
                       ),
-                    ],
+                      hintText: "Message",
+                      border: InputBorder.none,
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }
