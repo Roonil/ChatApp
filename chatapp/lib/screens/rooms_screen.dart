@@ -1,26 +1,23 @@
 import 'package:chatapp/providers/users.dart';
 import 'package:chatapp/screens/user_screen.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:search_page/search_page.dart';
 
+import '/widgets/room_tile.dart';
+import '../providers/users.dart';
+import '../screens/user_screen.dart';
 import '../providers/rooms.dart';
 import '../models/topic.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/rooms_list.dart';
 import '../widgets/nav_drawer.dart';
-import '../models/room.dart';
+import '../providers/room.dart';
 import '../widgets/modal_add_new_room.dart';
 
-class RoomsScreen extends StatefulWidget {
+class RoomsScreen extends StatelessWidget {
   const RoomsScreen({Key? key}) : super(key: key);
   static const routeName = "/rooms";
 
-  @override
-  State<RoomsScreen> createState() => _RoomsScreenState();
-}
-
-class _RoomsScreenState extends State<RoomsScreen> {
   @override
   Widget build(BuildContext context) {
     final Rooms rooms = Provider.of<Rooms>(context);
@@ -29,52 +26,22 @@ class _RoomsScreenState extends State<RoomsScreen> {
       for (String topicTitle in topicTitles.split(',')) {
         topics.add(Topic(name: topicTitle));
       }
-      setState(() {
-        rooms.addRoom(
-          Room(
-            title: title,
-            description: description,
-            members: [Provider.of<Users>(context, listen: false).withId(1)],
-            topics: topics,
-            hostId: 1,
-            id: 4,
-          ),
-        );
-      });
+
+      rooms.addRoom(
+        Room(
+          title: title,
+          description: description,
+          members: [Provider.of<Users>(context, listen: false).withId(1)],
+          topics: topics,
+          hostId: 1,
+          id: 4,
+        ),
+      );
     }
 
     return Scaffold(
-      bottomNavigationBar: Container(
-        // color: Colors.black,
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30),
-              topLeft: Radius.circular(30),
-            ),
-            color: Color.fromARGB(255, 50, 20, 45)),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-          child: GNav(
-            backgroundColor: Color.fromARGB(255, 50, 20, 45),
-            color: Color.fromARGB(255, 255, 255, 255),
-            activeColor: Color.fromARGB(255, 255, 255, 255),
-            tabBackgroundColor: Color.fromARGB(255, 29, 9, 35),
-            padding: EdgeInsets.all(16),
-            gap: 8,
-            tabs: [
-              GButton(
-                icon: Icons.home,
-                text: "Home",
-              ),
-              GButton(icon: Icons.search, text: "Search"),
-              GButton(icon: Icons.settings, text: "Settings"),
-              GButton(icon: Icons.local_activity, text: "Activity"),
-            ],
-          ),
-        ),
-      ),
       backgroundColor: Theme.of(context).backgroundColor,
-      drawer: const NavDrawer(),
+      // drawer: const NavDrawer(),
       appBar: AppBar(
         leading: Builder(builder: ((context) {
           return IconButton(
@@ -91,7 +58,18 @@ class _RoomsScreenState extends State<RoomsScreen> {
         title: const Text("Rooms"),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () => showSearch(
+                  context: context,
+                  delegate: SearchPage(
+                      builder: (Room room) => RoomTile(
+                          onTap: (_, __) {},
+                          deleteRoom: (_) {},
+                          tileKey: room.id,
+                          room: room),
+                      filter: (Room room) => [
+                            room.title,
+                          ],
+                      items: rooms.listify())),
               //TODO: Implement Search Function
               icon: Icon(
                 Icons.search,
@@ -120,7 +98,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
               ))
         ],
       ),
-      body: const RoomsList(),
+      body: RoomsList(rooms: rooms),
     );
   }
 }

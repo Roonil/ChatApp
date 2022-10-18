@@ -1,11 +1,13 @@
 import 'dart:math';
-
 import 'package:chatapp/models/message.dart';
 import 'package:chatapp/screens/room_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
 import 'package:provider/provider.dart';
-import '../widgets/messages_list.dart';
-import 'package:chatapp/providers/dummy_messages.dart';
+import '../widgets/chats/bubble_body.dart';
+import '../widgets/chats/messages_list.dart';
+import 'package:chatapp/providers/messages.dart';
 
 int generateMessageId() {
   return Random().nextInt(10);
@@ -32,11 +34,12 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
 //TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
-    final dummyMessages = Provider.of<Messages>(context);
+    final messages = Provider.of<Messages>(context);
     final args = ModalRoute.of(context)?.settings.arguments as Map;
     final int roomId = args['roomId'];
     final String roomName = args['roomName'];
     final messageController = TextEditingController();
+    final messageListController = ScrollController();
 
     void sendMessage() {
       final message = messageController.text;
@@ -45,13 +48,15 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
       }
       setState(() {
         if (parentId != null) {
-          Message replyingTo = dummyMessages.withId(parentId as int);
+          Message replyingTo = messages.withId(parentId as int);
           int messageId = generateMessageId();
 
           threadId = replyingTo.threadId ?? 1;
           replyingTo.createThread(threadId, messageId);
+          //messageListController
+          //  .jumpTo(messageListController.position.maxScrollExtent);
         }
-        dummyMessages.add(
+        messages.add(
           Message(
             roomId: roomId,
             userId: 1,
@@ -63,101 +68,102 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
             body: message,
           ),
         );
+        parentId = null;
+        // SchedulerBinding.instance.addPostFrameCallback((_) {
+        messageListController
+            .jumpTo(messageListController.position.minScrollExtent);
+        //   });
       });
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 3,
-        leading: BackButton(
-          color: Theme.of(context).textTheme.bodySmall?.color,
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
-              arguments: {'roomId': roomId}),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                roomName,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 3,
+          leading: BackButton(
+            color: Theme.of(context).textTheme.bodySmall?.color,
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
+                arguments: {'roomId': roomId}),
+            child: SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  roomName,
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
+        body: Column(children: [
           Flexible(
             child: MessagesList(
+                messageListController: messageListController,
                 drawReplyBox: drawReplyBox,
-                messages: dummyMessages.inRoom(roomId)),
+                messages: messages.inRoom(roomId)),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border:
-                      Border.all(color: Theme.of(context).primaryColorLight),
-                  color: Theme.of(context)
-                      .copyWith(brightness: Brightness.light)
-                      .cardColor),
-              child: Column(
-                children: [
-                  parentId != null
-                      ? Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 7),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 7),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white10,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            dummyMessages.withId(parentId as int).body,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      : Container(),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          focusNode: FocusNode(
-                            canRequestFocus: true,
-                          ),
-                          onSubmitted: (value) => sendMessage(),
-                          textInputAction: TextInputAction.go,
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            hintText: "Message",
-                            border: InputBorder.none,
-                          ),
+          Flexible(
+            flex: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                parentId != null
+                    ? Flexible(
+                        flex: 0,
+                        child: Row(
+                          children: [
+                            BubbleBody(
+                                isParent: true,
+                                body: messages.withId(parentId as int).body),
+                            IconButton(
+                                icon: const Icon(Icons.cancel_outlined),
+                                onPressed: () => setState(() {
+                                      parentId = null;
+                                    })),
+                          ],
                         ),
-                      ),
-                      IconButton(
+                      )
+                    : Container(),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color: Theme.of(context).primaryColorLight),
+                      color: Theme.of(context)
+                          .copyWith(brightness: Brightness.light)
+                          .cardColor),
+                  child: TextField(
+                    // focusNode: FocusNode(
+                    //   canRequestFocus: true,
+                    // ),
+                    onSubmitted: (value) => sendMessage(),
+                    onEditingComplete: () {},
+                    textInputAction: TextInputAction.go,
+                    controller: messageController,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
                         onPressed: sendMessage,
                         icon: const Icon(
                           Icons.send,
                         ),
                       ),
-                    ],
+                      hintText: "Message",
+                      border: InputBorder.none,
+                    ),
                   ),
-                ],
-              ),
+                )
+              ],
             ),
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }

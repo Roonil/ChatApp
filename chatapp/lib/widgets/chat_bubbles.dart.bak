@@ -1,10 +1,13 @@
-import 'package:chatapp/providers/current_user.dart';
+import 'package:swipe_to/swipe_to.dart';
+
+import '../providers/current_user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
 import '../models/message.dart';
+import 'bubble_body.dart';
 
 enum Mode {
   topLeft,
@@ -81,40 +84,7 @@ class Connector extends StatelessWidget {
   }
 }
 
-class BubbleBody extends StatelessWidget {
-  final String body;
-  final bool isParent;
-  final double? bottomMargin;
-
-  const BubbleBody(
-      {super.key,
-      this.bottomMargin,
-      required this.isParent,
-      required this.body});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
-      child: Card(
-          color: isParent ? Colors.deepPurple : Theme.of(context).cardColor,
-          margin: EdgeInsets.only(
-              bottom: bottomMargin ?? 4, top: 4, left: 4, right: 4),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
-            child: Text(
-              maxLines: isParent ? 1 : null,
-              overflow: isParent ? TextOverflow.ellipsis : null,
-              body,
-              style: const TextStyle(fontSize: 16),
-            ),
-          )),
-    );
-  }
-}
-
-class ChatBubble extends StatelessWidget {
+class ChatBubbles extends StatelessWidget {
   final Message message;
   // final Message? nextMessage;
   final Message? replyTo;
@@ -123,7 +93,7 @@ class ChatBubble extends StatelessWidget {
   late int messageUserId, messageId;
   late int? threadId;
 
-  ChatBubble({
+  ChatBubbles({
     super.key,
     //  required this.nextMessage,
     required this.replyTo,
@@ -156,17 +126,22 @@ class ChatBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             mainAxisAlignment: mainAxisAlignment,
             children: [
-              BubbleBody(
-                body: messageBody,
-                bottomMargin: 14,
-                isParent: false,
+              SwipeTo(
+                onRightSwipe: () {
+                  drawReplyBox(messageId);
+                },
+                child: BubbleBody(
+                  body: messageBody,
+                  bottomMargin: 14,
+                  isParent: false,
+                ),
               ),
-              messageUserId == userId
-                  ? Container()
-                  : IconButton(
-                      icon: const Icon(Icons.arrow_circle_right_outlined),
-                      onPressed: (() => drawReplyBox(messageId)),
-                    )
+              // messageUserId == userId
+              //     ? Container()
+              //     : IconButton(
+              //         icon: const Icon(Icons.arrow_circle_right_outlined),
+              //         onPressed: (() => drawReplyBox(messageId)),
+              //       )
             ],
           )
         : Column(children: [
@@ -215,10 +190,15 @@ class ChatBubble extends StatelessWidget {
                         "\u2500\u2500\ue0b1",
                         style: textStyle,
                       ),
-                BubbleBody(
-                  body: messageBody,
-                  bottomMargin: 14,
-                  isParent: false,
+                SwipeTo(
+                  onRightSwipe: () {
+                    drawReplyBox(messageId);
+                  },
+                  child: BubbleBody(
+                    body: messageBody,
+                    bottomMargin: 14,
+                    isParent: false,
+                  ),
                 ),
                 userId == messageUserId
                     ? Text(
