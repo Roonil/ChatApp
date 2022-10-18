@@ -1,15 +1,17 @@
-import 'package:chatapp/providers/current_user.dart';
-import 'package:chatapp/providers/rooms.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_route/annotations.dart';
 
+import '../providers/current_user_id.dart';
+import '../providers/rooms.dart';
 import '../providers/room.dart';
 import '../models/user.dart';
 import '../providers/users.dart';
 
 class RoomInfoScreen extends StatefulWidget {
-  static const routeName = "/rooms/room-info";
-  const RoomInfoScreen({super.key});
+  static const routeName = "room-info/";
+  final int roomId;
+  const RoomInfoScreen({@pathParam required this.roomId, super.key});
 
   @override
   State<RoomInfoScreen> createState() => _RoomInfoScreenState();
@@ -18,22 +20,24 @@ class RoomInfoScreen extends StatefulWidget {
 class _RoomInfoScreenState extends State<RoomInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    final User currentUser = Provider.of<CurrentUser>(context).user;
-    final int roomId =
-        (ModalRoute.of(context)?.settings.arguments as Map)['roomId'];
-    final Room room = Provider.of<Rooms>(context).withId(roomId);
+    final Users users = Provider.of<Users>(context, listen: false);
+    final int currentUserID =
+        Provider.of<CurrentUserID>(context, listen: false).userId;
+    final Room room =
+        Provider.of<Rooms>(context, listen: false).withId(widget.roomId);
     final User hostUser =
         Provider.of<Users>(context, listen: false).withId(room.hostId);
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
         title: const Text("Room Information"),
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Container(
+      body: SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -61,13 +65,13 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
               const SizedBox(
                 height: 20,
               ),
-              room.members.contains(currentUser)
+              room.membersIds.contains(currentUserID)
                   ? Container()
                   : Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(
                         onPressed: () => setState(() {
-                          room.addUser(currentUser);
+                          room.addUser(currentUserID);
                         }),
                         child: const Text(
                           "Join Room",
@@ -89,9 +93,9 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: room.members.length,
+                  itemCount: room.membersIds.length,
                   itemBuilder: (context, index) => ListTile(
-                    title: Text(room.members[index].name),
+                    title: Text(users.withId(room.membersIds[index]).name),
                   ),
                 ),
               )

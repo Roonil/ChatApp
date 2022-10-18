@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'package:chatapp/models/message.dart';
-import 'package:chatapp/screens/room_info_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:chatapp/models/message.dart';
+import 'package:chatapp/router/router.gr.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/rooms.dart';
 import '../widgets/chats/bubble_body.dart';
 import '../widgets/chats/messages_list.dart';
 import 'package:chatapp/providers/messages.dart';
@@ -14,8 +15,14 @@ int generateMessageId() {
 }
 
 class GCMessagesScreen extends StatefulWidget {
-  static const routeName = "/messages";
-  const GCMessagesScreen({Key? key}) : super(key: key);
+  static const routeName = "messages";
+  final int roomId;
+  //final String roomName;
+  const GCMessagesScreen(
+      {@PathParam() required this.roomId,
+      //  @PathParam() required this.roomName,
+      Key? key})
+      : super(key: key);
 
   @override
   State<GCMessagesScreen> createState() => _GCMessagesScreenState();
@@ -31,13 +38,17 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
     });
   }
 
+// ignore: todo
 //TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
     final messages = Provider.of<Messages>(context);
-    final args = ModalRoute.of(context)?.settings.arguments as Map;
-    final int roomId = args['roomId'];
-    final String roomName = args['roomName'];
+
+    // final args = ModalRoute.of(context)?.settings.arguments as Map;
+    // final int roomId = args['roomId'];
+    // final String roomName = args['roomName'];
+    final String roomName =
+        Provider.of<Rooms>(context).withId(widget.roomId).title;
     final messageController = TextEditingController();
     final messageListController = ScrollController();
 
@@ -58,7 +69,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         }
         messages.add(
           Message(
-            roomId: roomId,
+            roomId: widget.roomId,
             userId: 1,
             receiverId: 2,
             responses: [],
@@ -86,8 +97,10 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
           ),
           title: InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
-                arguments: {'roomId': roomId}),
+            onTap: () =>
+                context.router.push(RoomInfoRouter(roomId: widget.roomId)),
+            // onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
+            //     arguments: {'roomId': widget.roomId}),
             child: SizedBox(
               width: double.infinity,
               height: 60,
@@ -101,14 +114,18 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
           ),
         ),
         body: Column(children: [
-          Flexible(
-            child: MessagesList(
-                messageListController: messageListController,
-                drawReplyBox: drawReplyBox,
-                messages: messages.inRoom(roomId)),
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Flexible(
+              flex: 0,
+              child: MessagesList(
+                  messageListController: messageListController,
+                  drawReplyBox: drawReplyBox,
+                  messages: messages.inRoom(widget.roomId)),
+            ),
           ),
           Flexible(
-            flex: 0,
+            flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,

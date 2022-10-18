@@ -2,7 +2,6 @@ import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
-import 'package:flutter/scheduler.dart';
 import 'chat_bubbles.dart';
 
 class MessagesList extends StatelessWidget {
@@ -20,7 +19,7 @@ class MessagesList extends StatelessWidget {
   @override
   @override
   Widget build(BuildContext context) {
-    final controller = ScrollController(initialScrollOffset: 0);
+    //final controller = ScrollController(initialScrollOffset: 0);
     // SchedulerBinding.instance.addPostFrameCallback((_) {
     //   messageListController
     //       .jumpTo(messageListController.position.maxScrollExtent);
@@ -29,6 +28,7 @@ class MessagesList extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 0),
       child: ListView.builder(
         reverse: true,
+        shrinkWrap: true,
         controller: messageListController,
         itemBuilder: (BuildContext context, int index) {
           int indexRev = messages.length - index - 1;

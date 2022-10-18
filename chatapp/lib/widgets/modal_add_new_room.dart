@@ -1,8 +1,13 @@
+import 'package:chatapp/providers/current_user_id.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/topic.dart';
+import '../providers/room.dart';
+import '../providers/rooms.dart';
 
 class ModalAddNewRoom extends StatefulWidget {
-  final Function(String, String, String) addRoom;
-  const ModalAddNewRoom({required this.addRoom, super.key});
+  const ModalAddNewRoom({super.key});
 
   @override
   State<ModalAddNewRoom> createState() => _ModalAddNewRoomState();
@@ -11,18 +16,33 @@ class ModalAddNewRoom extends StatefulWidget {
 class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
   final _roomTitleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _tagsController = TextEditingController();
+  final _topicsController = TextEditingController();
 
   void _addRoom() {
+    final Rooms rooms = Provider.of<Rooms>(context, listen: false);
     final String roomTitle = _roomTitleController.text;
-    final String tags = _tagsController.text;
+    final String topics = _topicsController.text;
     final String description = _descriptionController.text;
 
-    if (roomTitle.isEmpty || tags.isEmpty) {
+    if (roomTitle.isEmpty || topics.isEmpty) {
       return;
     }
 
-    widget.addRoom(roomTitle, description, tags);
+    List<Topic> listOfTopics = [];
+    for (String topic in topics.split(',')) {
+      listOfTopics.add(Topic(name: topic));
+    }
+
+    rooms.addRoom(
+      Room(
+        title: roomTitle,
+        description: description,
+        membersIds: [Provider.of<CurrentUserID>(context, listen: false).userId],
+        topics: listOfTopics,
+        hostId: 1,
+        id: 4,
+      ),
+    );
     Navigator.of(context).pop();
   }
 
@@ -65,7 +85,7 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: TextField(
-          controller: _tagsController,
+          controller: _topicsController,
           autocorrect: false,
           decoration: const InputDecoration(
             alignLabelWithHint: true,

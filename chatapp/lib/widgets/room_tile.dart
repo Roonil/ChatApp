@@ -6,12 +6,12 @@ import '../providers/room.dart';
 
 class RoomTile extends StatefulWidget {
   final Room room;
-  final Function(int) deleteRoom;
+  final Function(int)? onSwipe;
   final Function(BuildContext, Room) onTap;
   final int tileKey;
   const RoomTile({
     Key? key,
-    required this.deleteRoom,
+    required this.onSwipe,
     required this.onTap,
     required this.tileKey,
     required this.room,
@@ -24,13 +24,12 @@ class RoomTile extends StatefulWidget {
 class _RoomTileState extends State<RoomTile> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).primaryColor,
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 5,
-      ),
+    var card = Card(
+      surfaceTintColor: Theme.of(context).primaryColorLight,
+      elevation: 3,
+      //color: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.all(0),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         onTap: () => widget.onTap(context, widget.room),
@@ -91,7 +90,7 @@ class _RoomTileState extends State<RoomTile> {
                 Icons.people_alt_outlined,
               ),
               title: Text(
-                  "${widget.room.members.length.toString()} Joined"), // const Text("0 Joined"),
+                  "${widget.room.membersIds.length.toString()} Joined"), // const Text("0 Joined"),
               trailing: Container(
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * 0.3,
@@ -109,6 +108,47 @@ class _RoomTileState extends State<RoomTile> {
         ),
       ),
     );
+    return Card(
+      //surfaceTintColor: Colors.transparent,
+
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      surfaceTintColor: Theme.of(context).primaryColorLight,
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 5,
+      ),
+      child: widget.onSwipe == null
+          ? card
+          : Dismissible(
+              background: const SwipeBackground(
+                alignment: Alignment.centerLeft,
+              ),
+              secondaryBackground:
+                  const SwipeBackground(alignment: Alignment.centerRight),
+              key: ValueKey(widget.room.id),
+              onDismissed: (direction) {
+                widget.onSwipe!(widget.room.id);
+              },
+              confirmDismiss: (direction) async {
+                return await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Confirm Deletion"),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text("Yes")),
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text("No")),
+                    ],
+                  ),
+                );
+              },
+              child: card,
+            ),
+    );
   }
 }
 
@@ -122,12 +162,8 @@ class SwipeBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).primaryColor,
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 5,
-      ),
+      color: Colors.transparent,
+      elevation: 0,
       child: Align(
         alignment: alignment,
         child: Padding(

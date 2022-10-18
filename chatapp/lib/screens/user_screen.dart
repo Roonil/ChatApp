@@ -1,31 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/current_user_id.dart';
 import '../models/user.dart';
 import '../providers/users.dart';
 
 class UserScreen extends StatelessWidget {
-  static const routeName = "/user";
+  static const routeName = "user";
+  static AppBar appBar(BuildContext context) {
+    return AppBar(
+      // leading: BackButton(
+      //   onPressed: () => context.router.pop(),
+      // ),
+      backgroundColor: Theme.of(context).primaryColor,
+      elevation: 3,
+      title: const Text("Profile"),
+    );
+  }
 
   const UserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final int userId =
-        (ModalRoute.of(context)?.settings.arguments as Map)['id'];
-    final User user = Provider.of<Users>(context).withId(userId);
+    // final int userId =
+    //     (ModalRoute.of(context)?.settings.arguments as Map)['id'];
+    // final User user = Provider.of<Users>(context).withId(userId);
+    final User user = Provider.of<Users>(context, listen: false)
+        .withId(Provider.of<CurrentUserID>(context).userId);
     final nameController = TextEditingController(text: user.name);
     final bioController = TextEditingController(text: user.profile.bio);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 3,
-        title: const Text("Profile"),
-      ),
-      body: SingleChildScrollView(
+    return SizedBox(
+      //bottomNavigationBar: const NavigationScreen(),
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(

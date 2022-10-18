@@ -1,6 +1,6 @@
 import 'package:swipe_to/swipe_to.dart';
 
-import '../../providers/current_user.dart';
+import '../../providers/current_user_id.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +9,7 @@ import '../../models/message.dart';
 import 'connector.dart';
 import 'bubble_body.dart';
 
+// ignore: must_be_immutable
 class ChatBubbles extends StatelessWidget {
   final Message message;
   final Message? replyTo;
@@ -32,7 +33,7 @@ class ChatBubbles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = Provider.of<CurrentUser>(context).user.id;
+    final userId = Provider.of<CurrentUserID>(context).userId;
     const MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start;
     final textDirection =
         messageUserId == userId ? TextDirection.rtl : TextDirection.ltr;

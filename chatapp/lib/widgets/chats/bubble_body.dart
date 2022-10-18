@@ -17,7 +17,8 @@ class BubbleBody extends StatelessWidget {
       constraints:
           BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.6),
       child: Card(
-          color: isParent ? Colors.redAccent : Theme.of(context).cardColor,
+          color:
+              isParent ? Colors.purple.shade900 : Theme.of(context).cardColor,
           margin: EdgeInsets.only(
               bottom: bottomMargin ?? 4, top: 4, left: 4, right: 4),
           child: Padding(

@@ -1,7 +1,6 @@
 import '../models/topic.dart';
 import 'package:flutter/material.dart';
 
-import './users.dart';
 import 'room.dart';
 
 class Rooms with ChangeNotifier {
@@ -10,21 +9,21 @@ class Rooms with ChangeNotifier {
         id: 1,
         hostId: 1,
         title: "Let's learn C++!",
-        members: [Users().withId(1)],
+        membersIds: [1],
         topics: [Topic(name: "C++"), Topic(name: "Java")],
         description: "Description 1"),
     Room(
         id: 2,
         hostId: 1,
         title: "Anyone up for a GC?",
-        members: [Users().withId(1), Users().withId(2)],
+        membersIds: [1, 2],
         topics: [Topic(name: "C++")],
         description: "Description 1"),
     Room(
         id: 3,
         hostId: 2,
         title: "WTH is going on here??!?",
-        members: [Users().withId(3)],
+        membersIds: [3],
         topics: [Topic(name: "C++")],
         description: "Description 1"),
   ];
