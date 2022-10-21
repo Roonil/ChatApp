@@ -10,10 +10,18 @@ import './screens/user_screen.dart';
 import './themes/theme_manager.dart';
 import './widgets/bottom_nav_bar.dart';
 import './screens/rooms_screen.dart';
-import './providers/current_user_id.dart';
+import 'providers/current_user.dart';
 import './providers/profiles.dart';
+import 'models/user.dart';
+import 'remote/register.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // final User user = Users().withId(1);
+  // TestRegistration.register(
+  //     email: user.email,
+  //     password: "user.password",
+  //     username: user.profile.userName);
   runApp(
     MultiProvider(
       providers: [
@@ -22,7 +30,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => Users()),
         ChangeNotifierProvider(create: (context) => Messages()),
         ChangeNotifierProvider(create: (context) => Rooms().at(1)),
-        ChangeNotifierProvider(create: (context) => CurrentUserID(userId: 1)),
+        ChangeNotifierProvider(create: (context) => CurrentUser(userId: 1)),
       ],
       child: const MyApp(),
     ),
@@ -38,8 +46,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final appRouter = AppRouter();
-  final Color primaryColor = const Color.fromARGB(255, 16, 2, 33);
-  final CurrentUserID currentUserID = CurrentUserID(userId: 1);
+  // final Color primaryColor = const Color.fromARGB(255, 16, 2, 33);
+  final CurrentUser currentUser = CurrentUser(userId: 1);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -47,8 +56,8 @@ class _MyAppState extends State<MyApp> {
       title: 'ChatApp',
       routerDelegate: appRouter.delegate(),
       routeInformationParser: appRouter.defaultRouteParser(),
-      theme: themeDataLight,
-      darkTheme: themeDataDark,
+      theme: theme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
     );
   }
@@ -60,6 +69,15 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Users users = Provider.of(context);
+    // users
+    //     .register(
+    //         email: "Test@gmail.com",
+    //         name: "Snakes",
+    //         password: "Password",
+    //         userName: "Kahoot")
+    //     .then((token) =>
+    //         Provider.of<CurrentUser>(context, listen: false).setToken = token);
     return AutoTabsScaffold(
       appBarBuilder: (context, tabsRouter) => tabsRouter.activeIndex == 1
           ? UserScreen.appBar(context)

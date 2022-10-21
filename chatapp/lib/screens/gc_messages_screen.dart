@@ -5,6 +5,7 @@ import 'package:chatapp/models/message.dart';
 import 'package:chatapp/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../providers/rooms.dart';
 import '../widgets/chats/bubble_body.dart';
 import '../widgets/chats/messages_list.dart';
@@ -50,7 +51,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
     final String roomName =
         Provider.of<Rooms>(context).withId(widget.roomId).title;
     final messageController = TextEditingController();
-    final messageListController = ScrollController();
+    final messageListController = ItemScrollController();
 
     void sendMessage() {
       final message = messageController.text;
@@ -81,8 +82,9 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         );
         parentId = null;
         // SchedulerBinding.instance.addPostFrameCallback((_) {
-        messageListController
-            .jumpTo(messageListController.position.minScrollExtent);
+        messageListController.jumpTo(index: 0);
+        // messageListController
+        //     .jumpTo(messageListController.position.minScrollExtent);
         //   });
       });
     }
@@ -113,74 +115,73 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
             ),
           ),
         ),
-        body: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Flexible(
-              flex: 0,
-              child: MessagesList(
-                  messageListController: messageListController,
-                  drawReplyBox: drawReplyBox,
-                  messages: messages.inRoom(widget.roomId)),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                parentId != null
-                    ? Flexible(
-                        flex: 0,
-                        child: Row(
-                          children: [
-                            BubbleBody(
-                                isParent: true,
-                                body: messages.withId(parentId as int).body),
-                            IconButton(
-                                icon: const Icon(Icons.cancel_outlined),
-                                onPressed: () => setState(() {
-                                      parentId = null;
-                                    })),
-                          ],
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: MessagesList(
+                      messageListController: messageListController,
+                      drawReplyBox: drawReplyBox,
+                      messages: messages.inRoom(widget.roomId)),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  parentId != null
+                      ? Flexible(
+                          flex: 0,
+                          child: Row(
+                            children: [
+                              BubbleBody(
+                                  isParent: true,
+                                  body: messages.withId(parentId as int).body),
+                              IconButton(
+                                  icon: const Icon(Icons.cancel_outlined),
+                                  onPressed: () => setState(() {
+                                        parentId = null;
+                                      })),
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: Theme.of(context).primaryColorLight),
+                        color: Theme.of(context)
+                            .copyWith(brightness: Brightness.light)
+                            .cardColor),
+                    child: TextField(
+                      // focusNode: FocusNode(
+                      //   canRequestFocus: true,
+                      // ),
+                      onSubmitted: (value) => sendMessage(),
+                      onEditingComplete: () {},
+                      textInputAction: TextInputAction.go,
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: sendMessage,
+                          icon: const Icon(
+                            Icons.send,
+                          ),
                         ),
-                      )
-                    : Container(),
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                          color: Theme.of(context).primaryColorLight),
-                      color: Theme.of(context)
-                          .copyWith(brightness: Brightness.light)
-                          .cardColor),
-                  child: TextField(
-                    // focusNode: FocusNode(
-                    //   canRequestFocus: true,
-                    // ),
-                    onSubmitted: (value) => sendMessage(),
-                    onEditingComplete: () {},
-                    textInputAction: TextInputAction.go,
-                    controller: messageController,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        onPressed: sendMessage,
-                        icon: const Icon(
-                          Icons.send,
-                        ),
+                        hintText: "Message",
+                        border: InputBorder.none,
                       ),
-                      hintText: "Message",
-                      border: InputBorder.none,
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ]));
+                  )
+                ],
+              ),
+            ]));
   }
 }

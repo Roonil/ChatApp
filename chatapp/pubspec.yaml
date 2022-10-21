@@ -46,6 +46,13 @@ dependencies:
   search_page: ^2.2.0
   hexcolor: ^3.0.1
   term_glyph: ^1.2.1
+  http: ^0.13.5
+  sqflite: ^2.1.0+1
+  path: ^1.8.2
+  scrollable_positioned_list: ^0.3.5
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.11
+  drift: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +65,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   auto_route_generator: ^5.0.2
+  drift_dev: ^2.2.0+1
   build_runner: ^2.3.0
 
 # For information on the generic Dart part of this file, see the

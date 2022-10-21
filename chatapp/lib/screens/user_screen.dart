@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/current_user_id.dart';
+import '../providers/current_user.dart';
 import '../models/user.dart';
 import '../providers/users.dart';
 
@@ -26,7 +26,7 @@ class UserScreen extends StatelessWidget {
     //     (ModalRoute.of(context)?.settings.arguments as Map)['id'];
     // final User user = Provider.of<Users>(context).withId(userId);
     final User user = Provider.of<Users>(context, listen: false)
-        .withId(Provider.of<CurrentUserID>(context).userId);
+        .withId(Provider.of<CurrentUser>(context).userId);
     final nameController = TextEditingController(text: user.name);
     final bioController = TextEditingController(text: user.profile.bio);
 

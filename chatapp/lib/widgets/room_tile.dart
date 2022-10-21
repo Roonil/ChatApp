@@ -57,10 +57,8 @@ class _RoomTileState extends State<RoomTile> {
                           fontSize: 19,
                           fontFamily: 'RobotoCondensed',
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context)
-                              .primaryTextTheme
-                              .titleMedium
-                              ?.color),
+                          color:
+                              Theme.of(context).textTheme.titleMedium?.color),
                     ),
                   ),
                 ],
@@ -71,23 +69,23 @@ class _RoomTileState extends State<RoomTile> {
                   Text(
                     DateFormat.yMMMd().format(widget.room.createdAt),
                     style: TextStyle(
-                      color:
-                          Theme.of(context).primaryTextTheme.bodySmall?.color,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
                 ],
               ),
             ),
-            const Divider(
+            Divider(
               height: 10,
               thickness: 1,
-              color: Colors.white10,
+              color: Theme.of(context).dividerColor,
               indent: 10,
               endIndent: 10,
             ),
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 Icons.people_alt_outlined,
+                color: Theme.of(context).iconTheme.color,
               ),
               title: Text(
                   "${widget.room.membersIds.length.toString()} Joined"), // const Text("0 Joined"),
@@ -174,7 +172,7 @@ class SwipeBackground extends StatelessWidget {
                 fontSize: 19,
                 fontFamily: 'RobotoCondensed',
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryTextTheme.caption?.color),
+                color: Theme.of(context).textTheme.caption?.color),
           ),
         ),
       ),

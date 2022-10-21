@@ -28,8 +28,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: GNav(
             selectedIndex: widget.tabsRouter.activeIndex,
             onTabChange: widget.tabsRouter.setActiveIndex,
-            color: const Color.fromARGB(255, 255, 255, 255),
-            activeColor: const Color.fromARGB(255, 255, 255, 255),
+            color: Theme.of(context).textTheme.titleSmall?.color,
+            //color: const Color.fromARGB(255, 255, 255, 255),
+            activeColor: Theme.of(context).colorScheme.onPrimary,
+            //activeColor: const Color.fromARGB(255, 255, 255, 255),
             tabBackgroundColor:
                 Theme.of(context).chipTheme.backgroundColor ?? Colors.blue,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

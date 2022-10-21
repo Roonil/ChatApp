@@ -2,11 +2,12 @@ import 'package:chatapp/models/message.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'chat_bubbles.dart';
 
 class MessagesList extends StatelessWidget {
   final List<Message> messages;
-  final ScrollController messageListController;
+  final ItemScrollController messageListController;
   final void Function(int) drawReplyBox;
 
   const MessagesList({
@@ -26,17 +27,20 @@ class MessagesList extends StatelessWidget {
     // });
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
-      child: ListView.builder(
+      child: ScrollablePositionedList.builder(
         reverse: true,
         shrinkWrap: true,
-        controller: messageListController,
+        itemScrollController: messageListController,
         itemBuilder: (BuildContext context, int index) {
-          int indexRev = messages.length - index - 1;
+          int indexRev = messages.length <= 1 ? 0 : messages.length - index - 1;
+
           return ChatBubbles(
             message: messages[indexRev],
             drawReplyBox: drawReplyBox,
-            replyTo: messages.firstWhereOrNull(
-                (message) => message.id == messages[indexRev].responseTo),
+            replyTo: messages.isEmpty
+                ? null
+                : messages.firstWhereOrNull(
+                    (message) => message.id == messages[indexRev].responseTo),
           );
         },
         itemCount: messages.length,

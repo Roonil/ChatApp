@@ -49,9 +49,14 @@ class RoomsScreen extends StatefulWidget {
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           onPressed: (() => showModalBottomSheet(
+              isScrollControlled: true,
               context: context,
               builder: (_) {
-                return const ModalAddNewRoom();
+                return Container(
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: const ModalAddNewRoom(),
+                );
               })),
         ),
         // IconButton(

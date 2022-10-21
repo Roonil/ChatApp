@@ -1,4 +1,4 @@
-import 'package:chatapp/providers/current_user_id.dart';
+import 'package:chatapp/providers/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,14 +30,18 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
 
     List<Topic> listOfTopics = [];
     for (String topic in topics.split(',')) {
-      listOfTopics.add(Topic(name: topic));
+      if (topic.trim().isNotEmpty) {
+        listOfTopics.add(Topic(name: topic, createdAt: DateTime.now()));
+      } else {
+        return;
+      }
     }
 
     rooms.addRoom(
       Room(
         title: roomTitle,
         description: description,
-        membersIds: [Provider.of<CurrentUserID>(context, listen: false).userId],
+        membersIds: [Provider.of<CurrentUser>(context, listen: false).userId],
         topics: listOfTopics,
         hostId: 1,
         id: 4,
@@ -48,7 +52,7 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       const Padding(
         padding: EdgeInsets.all(7),
       ),

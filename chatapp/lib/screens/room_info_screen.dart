@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_route/annotations.dart';
 
-import '../providers/current_user_id.dart';
+import '../providers/current_user.dart';
 import '../providers/rooms.dart';
 import '../providers/room.dart';
 import '../models/user.dart';
@@ -21,8 +21,8 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final Users users = Provider.of<Users>(context, listen: false);
-    final int currentUserID =
-        Provider.of<CurrentUserID>(context, listen: false).userId;
+    final int currentUser =
+        Provider.of<CurrentUser>(context, listen: false).userId;
     final Room room =
         Provider.of<Rooms>(context, listen: false).withId(widget.roomId);
     final User hostUser =
@@ -65,13 +65,13 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
               const SizedBox(
                 height: 20,
               ),
-              room.membersIds.contains(currentUserID)
+              room.membersIds.contains(currentUser)
                   ? Container()
                   : Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(
                         onPressed: () => setState(() {
-                          room.addUser(currentUserID);
+                          room.addUser(currentUser);
                         }),
                         child: const Text(
                           "Join Room",

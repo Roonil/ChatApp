@@ -29,7 +29,7 @@ class Connector extends StatelessWidget {
         children: [
           Text(
             "╭\u2500",
-            style: textStyle,
+            style: textStyle.copyWith(height: 2),
           ),
           Text(
             "\u2502 ",
@@ -65,7 +65,7 @@ class Connector extends StatelessWidget {
         children: [
           Text(
             "\u2500╮",
-            style: textStyle,
+            style: textStyle.copyWith(height: 2),
           ),
           Text(" \u2502", style: textStyle.copyWith(height: 1)),
         ],
