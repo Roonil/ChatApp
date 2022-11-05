@@ -1,8 +1,11 @@
-import 'package:chatapp/screens/OTP_verification_screen.dart';
+//import 'package:chatapp/repo/feed_repo.dart';
 import 'package:chatapp/screens/login_screen.dart';
 import 'package:chatapp/screens/messages_screen.dart';
+import 'package:chatapp/screens/otp_verification_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
+//import 'package:chatapp/screens/feed_screen.dart';
 import 'package:flutter/material.dart';
+//import 'package:flutter_icons/flutter_icons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Chatapp',
-      theme: ThemeData.light(),
+      theme: ThemeData.dark(),
       home: const OtpScreen(),
       routes: {
         RoomsScreen.routeName: (context) => const RoomsScreen(),
