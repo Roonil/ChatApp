@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+//import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 
 class AddPostAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -20,7 +20,7 @@ class AddPostAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flatbutton(
+          ElevatedButton(
             child: Text(
               'Cancel',
               style: TextStyle(
@@ -30,10 +30,10 @@ class AddPostAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             onPressed: () {
               Navigator.pop(context);
-              FlutterStatusbarManager.setHidden(false);
+              //FlutterStatusbarManager.setHidden(false);
             },
           ),
-          FlatButton(
+          ElevatedButton(
             child: screenName == 'gallery'
                 ? Row(
                     children: [
@@ -58,7 +58,7 @@ class AddPostAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {},
           ),
           screenName == 'gallery'
-              ? FlatButton(
+              ? ElevatedButton(
                   child: Text(
                     '   Next',
                     style: TextStyle(
@@ -68,7 +68,7 @@ class AddPostAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   onPressed: () {},
                 )
-              : FlatButton(
+              : ElevatedButton(
                   child: Container(),
                   onPressed: () {},
                 ),

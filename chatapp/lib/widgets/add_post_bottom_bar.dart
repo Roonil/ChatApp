@@ -102,8 +102,8 @@ class AddPostGallery extends StatelessWidget {
   }
 
   Widget _circularStackButton({
-    @required IconData icon,
-    String text,
+    required IconData icon,
+    String? text,
   }) {
     if (text == null) {
       return Container(
