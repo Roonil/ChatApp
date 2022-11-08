@@ -52,7 +52,7 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
                 ),
               ),
               Text(
-                room.title,
+                room.roomName,
                 style: const TextStyle(fontSize: 34),
               ),
               const SizedBox(
@@ -65,7 +65,7 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
               const SizedBox(
                 height: 20,
               ),
-              room.membersIds.contains(currentUser)
+              room.members.contains(currentUser)
                   ? Container()
                   : Align(
                       alignment: Alignment.center,
@@ -93,9 +93,9 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: room.membersIds.length,
+                  itemCount: room.members.length,
                   itemBuilder: (context, index) => ListTile(
-                    title: Text(users.withId(room.membersIds[index]).name),
+                    title: Text(users.withId(room.members[index]).name),
                   ),
                 ),
               )

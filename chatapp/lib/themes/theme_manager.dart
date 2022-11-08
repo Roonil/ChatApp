@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 //Color primaryColor = Colors.red.shade900.withAlpha(80);
 //Color primaryColor = Colors.purple.shade900.withAlpha(100);
 //const Color primaryColor = Color.fromARGB(255, 16, 2, 33);
-Color primaryColor = Color.fromARGB(255, 8, 1, 23);
-Color secondaryColor = Color.fromARGB(255, 249, 63, 224);
+Color primaryColor = Color.fromARGB(255, 11, 1, 23);
+
+Color secondaryColor = Color.fromARGB(255, 53, 235, 255);
 //const Color primaryColor = Color.fromARGB(255, 33, 2, 2); //Blood Red
 //Color secondaryColor = Colors.purple.shade900.withAlpha(100);
 final ThemeData themeDataLight = ThemeData(

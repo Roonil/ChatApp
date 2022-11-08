@@ -18,8 +18,8 @@ class RoomsList extends StatelessWidget {
     context.router.push(GCMessageRouter(roomId: room.id));
   }
 
-  void deleteRoom(int id) {
-    rooms.deleteRoomWithID(id);
+  void deleteRoom(int id, BuildContext context) {
+    rooms.deleteRoomWithID(id, context);
   }
 
   @override
@@ -28,7 +28,7 @@ class RoomsList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return RoomTile(
             room: rooms.at(index),
-            onSwipe: deleteRoom,
+            onSwipe: (index) => deleteRoom(index, context),
             tileKey: index,
             onTap: openRoom);
       },

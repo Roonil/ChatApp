@@ -12,27 +12,27 @@ import '../models/user.dart';
 class Users extends ChangeNotifier {
   static final Uri _url = Uri.parse("http://localhost:3306/api/user/signup");
   static final List<User> _users = [
-    // User(
-    //     id: 1,
-    //     email: "anandverma458@gmail.com",
-    //     name: "Anand Verma",
-    //     role: "admin",
-    //     profile: Profiles().withId(1),
-    //     createdAt: DateTime.now()),
-    // User(
-    //     id: 2,
-    //     email: "dpack@gmail.com",
-    //     name: "Dee Pack",
-    //     role: "admin",
-    //     profile: Profiles().withId(2),
-    //     createdAt: DateTime.now()),
-    // User(
-    //     id: 3,
-    //     email: "hwi@hmail.com",
-    //     name: "Random Name",
-    //     role: "user",
-    //     profile: Profiles().withId(3),
-    //     createdAt: DateTime.now()),
+    User(
+        id: 1,
+        email: "anandverma458@gmail.com",
+        name: "Anand Verma",
+        role: "admin",
+        profile: Profiles().withId(1),
+        createdAt: DateTime.now()),
+    User(
+        id: 2,
+        email: "dpack@gmail.com",
+        name: "Dee Pack",
+        role: "admin",
+        profile: Profiles().withId(2),
+        createdAt: DateTime.now()),
+    User(
+        id: 3,
+        email: "hwi@hmail.com",
+        name: "Random Name",
+        role: "user",
+        profile: Profiles().withId(3),
+        createdAt: DateTime.now()),
   ];
 
   User withId(int id) {

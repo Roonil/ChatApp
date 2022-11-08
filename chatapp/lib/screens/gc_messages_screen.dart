@@ -44,16 +44,12 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
   @override
   Widget build(BuildContext context) {
     final messages = Provider.of<Messages>(context);
-
-    // final args = ModalRoute.of(context)?.settings.arguments as Map;
-    // final int roomId = args['roomId'];
-    // final String roomName = args['roomName'];
     final String roomName =
-        Provider.of<Rooms>(context).withId(widget.roomId).title;
+        Provider.of<Rooms>(context).withId(widget.roomId).roomName;
     final messageController = TextEditingController();
     final messageListController = ItemScrollController();
 
-    void sendMessage() {
+    void send() {
       final message = messageController.text;
       if (message.isEmpty || message.trim().isEmpty) {
         return;
@@ -69,23 +65,28 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
           //  .jumpTo(messageListController.position.maxScrollExtent);
         }
         messages.add(
-          Message(
-            roomId: widget.roomId,
-            userId: 1,
-            receiverId: 2,
-            responses: [],
-            responseTo: parentId,
-            threadId: threadId,
-            id: 2,
             body: message,
-          ),
-        );
+            context: context,
+            receiverId: 0,
+            roomId: widget.roomId,
+            threadId: parentId);
+
+        // messages.add(
+        //     Message(
+        //       roomId: widget.roomId,
+        //       userId: 1,
+        //       receiverId: 2,
+        //       responses: [],
+        //       createdAt: DateTime.now(),
+        //       responseTo: parentId,
+        //       threadId: threadId,
+        //       id: 2,
+        //       body: message,
+        //     ),
+        //     context);
         parentId = null;
-        // SchedulerBinding.instance.addPostFrameCallback((_) {
+
         messageListController.jumpTo(index: 0);
-        // messageListController
-        //     .jumpTo(messageListController.position.minScrollExtent);
-        //   });
       });
     }
 
@@ -154,7 +155,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                         const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(30),
                         border: Border.all(
                             color: Theme.of(context).primaryColorLight),
                         color: Theme.of(context)
@@ -164,13 +165,13 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                       // focusNode: FocusNode(
                       //   canRequestFocus: true,
                       // ),
-                      onSubmitted: (value) => sendMessage(),
+                      onSubmitted: (value) => send(),
                       onEditingComplete: () {},
                       textInputAction: TextInputAction.go,
                       controller: messageController,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
-                          onPressed: sendMessage,
+                          onPressed: send,
                           icon: const Icon(
                             Icons.send,
                           ),

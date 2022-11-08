@@ -52,7 +52,7 @@ class _RoomTileState extends State<RoomTile> {
                   ),
                   Flexible(
                     child: Text(
-                      widget.room.title,
+                      widget.room.roomName,
                       style: TextStyle(
                           fontSize: 19,
                           fontFamily: 'RobotoCondensed',
@@ -88,7 +88,7 @@ class _RoomTileState extends State<RoomTile> {
                 color: Theme.of(context).iconTheme.color,
               ),
               title: Text(
-                  "${widget.room.membersIds.length.toString()} Joined"), // const Text("0 Joined"),
+                  "${widget.room.members.length.toString()} Joined"), // const Text("0 Joined"),
               trailing: Container(
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * 0.3,

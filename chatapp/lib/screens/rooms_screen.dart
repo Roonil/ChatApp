@@ -36,7 +36,7 @@ class RoomsScreen extends StatefulWidget {
                         tileKey: room.id,
                         room: room),
                     filter: (Room room) => [
-                          room.title,
+                          room.roomName,
                         ],
                     items: rooms.listify())),
             icon: Icon(

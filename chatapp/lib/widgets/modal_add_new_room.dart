@@ -1,9 +1,8 @@
-import 'package:chatapp/providers/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/topic.dart';
-import '../providers/room.dart';
+
 import '../providers/rooms.dart';
 
 class ModalAddNewRoom extends StatefulWidget {
@@ -36,17 +35,17 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
         return;
       }
     }
-
-    rooms.addRoom(
-      Room(
-        title: roomTitle,
-        description: description,
-        membersIds: [Provider.of<CurrentUser>(context, listen: false).userId],
-        topics: listOfTopics,
-        hostId: 1,
-        id: 4,
-      ),
-    );
+    rooms.addRoom(roomTitle, description, listOfTopics, context);
+    // rooms.addRoom(
+    //     Room(
+    //       title: roomTitle,
+    //       description: description,
+    //       membersIds: [Provider.of<CurrentUser>(context, listen: false).userId],
+    //       topics: listOfTopics,
+    //       hostId: 1,
+    //       id: 4,
+    //     ),
+    //     context);
     Navigator.of(context).pop();
   }
 
