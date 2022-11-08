@@ -1,9 +1,9 @@
-//import 'package:chatapp/repo/feed_repo.dart';
+import 'package:chatapp/repo/feed_repo.dart';
 import 'package:chatapp/screens/login_screen.dart';
 import 'package:chatapp/screens/messages_screen.dart';
 import 'package:chatapp/screens/otp_verification_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
-//import 'package:chatapp/screens/feed_screen.dart';
+import 'package:chatapp/screens/feed_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_icons/flutter_icons.dart';
 
@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Chatapp',
       theme: ThemeData.dark(),
-      home: const OtpScreen(),
+      home: FeedScreen(futureListOfPost: ,),
       routes: {
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
