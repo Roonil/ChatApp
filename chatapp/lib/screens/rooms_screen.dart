@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chatapp/router/router.gr.dart';
+import 'package:chatapp/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:search_page/search_page.dart';
@@ -22,7 +23,7 @@ class RoomsScreen extends StatefulWidget {
       actions: [
         IconButton(
             onPressed: () => showSearch(
-                useRootNavigator: true,
+                //   useRootNavigator: true,
                 context: context,
                 delegate: SearchPage(
                     barTheme: Theme.of(context).copyWith(
@@ -49,6 +50,8 @@ class RoomsScreen extends StatefulWidget {
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           onPressed: (() => showModalBottomSheet(
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 10,
               isScrollControlled: true,
               context: context,
               builder: (_) {

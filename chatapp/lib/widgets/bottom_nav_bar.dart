@@ -27,7 +27,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
           child: GNav(
             selectedIndex: widget.tabsRouter.activeIndex,
-            onTabChange: widget.tabsRouter.setActiveIndex,
+            onTabChange: (index) {
+              FocusScope.of(context).unfocus();
+              widget.tabsRouter.setActiveIndex(index);
+            },
             color: Theme.of(context).textTheme.titleSmall?.color,
             //color: const Color.fromARGB(255, 255, 255, 255),
             activeColor: Theme.of(context).colorScheme.onPrimary,

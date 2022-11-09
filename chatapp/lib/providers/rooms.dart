@@ -14,23 +14,23 @@ class Rooms with ChangeNotifier {
         members: [1],
         topics: [
           Topic(name: "C++", createdAt: DateTime.now()),
-          Topic(name: "Java", createdAt: DateTime.now())
+          Topic(name: "C", createdAt: DateTime.now())
         ],
         description: "Description 1"),
     Room(
         id: 2,
         hostId: 1,
-        roomName: "Anyone up for a GC?",
+        roomName: "Workspace",
         members: [1, 2],
-        topics: [Topic(name: "C++", createdAt: DateTime.now())],
+        topics: [Topic(name: "Java", createdAt: DateTime.now())],
         description: "Description 1"),
-    Room(
-        id: 3,
-        hostId: 2,
-        roomName: "WTH is going on here??!?",
-        members: [3],
-        topics: [Topic(name: "C++", createdAt: DateTime.now())],
-        description: "Description 1"),
+    // Room(
+    //     id: 3,
+    //     hostId: 2,
+    //     roomName: "Python from Scratch",
+    //     members: [3],
+    //     topics: [Topic(name: "Python", createdAt: DateTime.now())],
+    //     description: "Description 1"),
   ];
   Rooms() {
     RoomsDb.instance.getRooms().then((rooms) {

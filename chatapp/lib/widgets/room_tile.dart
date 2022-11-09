@@ -91,7 +91,7 @@ class _RoomTileState extends State<RoomTile> {
                   "${widget.room.members.length.toString()} Joined"), // const Text("0 Joined"),
               trailing: Container(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.3,
+                  maxWidth: MediaQuery.of(context).size.width * 0.5,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,

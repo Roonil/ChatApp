@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class Users extends ChangeNotifier {
-  static final Uri _url = Uri.parse("http://localhost:3306/api/user/signup");
+  static final Uri _url = Uri.parse("http://10.0.2.2:3306/api/user/signup");
   static final List<User> _users = [
     User(
         id: 1,
@@ -22,7 +22,7 @@ class Users extends ChangeNotifier {
     User(
         id: 2,
         email: "dpack@gmail.com",
-        name: "Dee Pack",
+        name: "Deepak Khattar",
         role: "admin",
         profile: Profiles().withId(2),
         createdAt: DateTime.now()),

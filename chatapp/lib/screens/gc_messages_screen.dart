@@ -96,7 +96,10 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
           elevation: 3,
           leading: BackButton(
             color: Theme.of(context).textTheme.bodySmall?.color,
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              Navigator.pop(context);
+            },
           ),
           title: InkWell(
             borderRadius: BorderRadius.circular(20),

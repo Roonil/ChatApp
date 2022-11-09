@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../strings/server_host.dart';
+
 class TestRegistration {
-  static Uri url = Uri.parse("http://10.0.2.2:3306/api/user/signup");
+  static Uri url = Uri.parse("${serverHost}user/signup");
   static void register(
       {required String email,
       required String password,

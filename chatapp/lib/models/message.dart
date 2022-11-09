@@ -20,8 +20,6 @@ class Message {
     required this.body,
   });
   factory Message.fromJson(dynamic json) {
-    print("JSONTIME");
-    print(json);
     return Message(
         body: json['body'] as String,
         id: json['id'],

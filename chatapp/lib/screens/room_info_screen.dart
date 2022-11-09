@@ -33,74 +33,73 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 3,
         title: const Text("Room Information"),
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: BackButton(onPressed: () {
+          FocusScope.of(context).unfocus();
+          Navigator.pop(context);
+        }),
       ),
-      body: SizedBox(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Center(
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  radius: 100,
-                  child: const FittedBox(
-                    child: Icon(Icons.person, size: 150),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            Center(
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                radius: 100,
+                child: const FittedBox(
+                  child: Icon(Icons.person, size: 150),
                 ),
               ),
-              Text(
-                room.roomName,
-                style: const TextStyle(fontSize: 34),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Created By: ${hostUser.name}",
-                style: const TextStyle(fontSize: 30),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              room.members.contains(currentUser)
-                  ? Container()
-                  : Align(
-                      alignment: Alignment.center,
-                      child: ElevatedButton(
-                        onPressed: () => setState(() {
-                          room.addUser(currentUser);
-                        }),
-                        child: const Text(
-                          "Join Room",
-                          style: TextStyle(fontSize: 20),
-                        ),
+            ),
+            Text(
+              room.roomName,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              "Created By: ${hostUser.name}",
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            room.members.contains(currentUser)
+                ? Container()
+                : Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: () => setState(() {
+                        room.addUser(currentUser);
+                      }),
+                      child: const Text(
+                        "Join Room",
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Members: ",
-                  style: TextStyle(fontSize: 25),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: room.members.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(users.withId(room.members[index]).name),
                   ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Members: ",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: room.members.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(users.withId(room.members[index]).name),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

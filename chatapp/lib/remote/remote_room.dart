@@ -8,8 +8,11 @@ import '../models/topic.dart';
 import '../providers/room.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/users.dart';
+import '../strings/server_host.dart';
+
 class RemoteRoom {
-  static Uri url = Uri.parse("http://10.0.2.2:3306/api/room/");
+  static Uri url = Uri.parse("${serverHost}room/");
 
   static Future<Room> createRoom({
     required String roomName,
@@ -19,6 +22,7 @@ class RemoteRoom {
   }) async {
     final String? token =
         Provider.of<CurrentUser>(context, listen: false).token;
+    final Users users = Provider.of<Users>(context, listen: false);
 
     List<String> stringTopics = [];
     for (var topic in topics) {
@@ -29,7 +33,7 @@ class RemoteRoom {
         Uri.parse(
             "${url}create?roomName=$roomName&description=$description&topics=${stringTopics.toString()}"),
         headers: {"Authorization": token!});
-
+    print(response.body);
     Map<String, dynamic> newJson = jsonDecode(response.body)['room'];
 
     List<dynamic> st = newJson['topics'] as List<dynamic>;
@@ -40,7 +44,8 @@ class RemoteRoom {
     newJson['topics'] = newJson['topics']
         .toString()
         .substring(0, newJson['topics'].toString().length - 1);
-
+    print(newJson);
+    newJson['members'] = [newJson['host']['id']];
     return Room.fromJson(newJson);
   }
 

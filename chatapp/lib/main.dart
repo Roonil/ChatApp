@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:chatapp/screens/login_screen.dart';
+import 'package:chatapp/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_route/auto_route.dart';
@@ -75,6 +77,10 @@ class _MyAppState extends State<MyApp> {
 
       currentUser.setToken = token;
     });
+
+    // return const MaterialApp(
+    //   home: LoginScreen(),
+    // );
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
