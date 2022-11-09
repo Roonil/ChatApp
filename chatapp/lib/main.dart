@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Chatapp',
       theme: ThemeData.dark(),
-      home: FeedScreen(futureListOfPost: ,),
+      home: const OtpScreen(),
       routes: {
         RoomsScreen.routeName: (context) => const RoomsScreen(),
       },
