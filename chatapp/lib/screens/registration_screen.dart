@@ -1,208 +1,128 @@
-import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import '../common/theme_helper.dart';
-import '../widgets/header_widget.dart';
+import '../remote/register.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class RegistrationScreen extends StatelessWidget {
+  static const routeName = '/register';
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController repeatPasswordController =
+      TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
-  @override
-  State<StatefulWidget> createState() {
-    return _RegistrationPageState();
+  void register() {
+    TestRegistration.register(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        username: userNameController.text);
   }
-}
 
-class _RegistrationPageState extends State<RegistrationPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool checkedValue = false;
-  bool checkboxValue = false;
+  RegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            const SizedBox(
-              height: 150,
-              child: HeaderWidget(150, false, Icons.app_registration_rounded),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          child: Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  border:
-                                      Border.all(width: 5, color: Colors.white),
-                                  color: Colors.white,
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 20,
-                                      offset: Offset(5, 5),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.grey.shade300,
-                                  size: 80.0,
-                                ),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(80, 80, 0, 0),
-                                child: Icon(
-                                  Icons.add_circle,
-                                  color: Colors.grey.shade700,
-                                  size: 25.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20.0),
-                        Container(
-                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                          child: TextFormField(
-                            decoration: ThemeHelper().textInputDecoration(
-                                "E-mail address", "Enter your email"),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (val) {
-                              if ((val!.isNotEmpty) &&
-                                  !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
-                                      .hasMatch(val)) {
-                                return "Enter a valid email address";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        // SizedBox(height: 20.0),
-                        // Container(
-                        //   child: TextFormField(
-                        //     decoration: ThemeHelper().textInputDecoration(
-                        //         "Mobile Number", "Enter your mobile number"),
-                        //     keyboardType: TextInputType.phone,
-                        //     validator: (val) {
-                        //       if (!(val!.isEmpty) &&
-                        //           !RegExp(r"^(\d+)*$").hasMatch(val)) {
-                        //         return "Enter a valid phone number";
-                        //       }
-                        //       return null;
-                        //     },
-                        //   ),
-                        //   decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        //  ),
-                        // SizedBox(height: 20.0),
-                        // Container(
-                        //   child: TextFormField(
-                        //     obscureText: true,
-                        //     decoration: ThemeHelper().textInputDecoration(
-                        //         "Password*", "Enter your password"),
-                        //     validator: (val) {
-                        //       if (val!.isEmpty) {
-                        //         return "Please enter your password";
-                        //       }
-                        //       return null;
-                        //     },
-                        //   ),
-                        //   decoration: ThemeHelper().inputBoxDecorationShaddow(),
-                        // ),
-                        const SizedBox(height: 15.0),
-                        FormField<bool>(
-                          builder: (state) {
-                            return Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Checkbox(
-                                        value: checkboxValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checkboxValue = value!;
-                                            state.didChange(value);
-                                          });
-                                        }),
-                                    const Text(
-                                      "I accept all terms and conditions.",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    state.errorText ?? '',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: Theme.of(context).errorColor,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            );
-                          },
-                          validator: (value) {
-                            if (!checkboxValue) {
-                              return 'You need to accept terms and conditions';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 20.0),
-                        Container(
-                          decoration:
-                              ThemeHelper().buttonBoxDecoration(context),
-                          child: ElevatedButton(
-                            style: ThemeHelper().buttonStyle(),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                              child: Text(
-                                "Register".toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RoomsScreen()),
-                                    (Route<dynamic> route) => false);
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+      backgroundColor: Colors.black,
+      appBar: AppBar(title: const Text("Register")),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.purple),
+                color: Colors.black),
+            child: TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(height: 2),
+                contentPadding: EdgeInsets.zero,
+                border: InputBorder.none,
+                hintText: "Enter your name",
+                label: Text("Name"),
               ),
             ),
-          ],
-        ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.purple),
+                color: Colors.black),
+            child: TextField(
+              controller: userNameController,
+              decoration: const InputDecoration(
+                  labelStyle: TextStyle(height: 2),
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  hintText: "Enter your username",
+                  label: Text("Username")),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.purple),
+                color: Colors.black),
+            child: TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                  labelStyle: TextStyle(height: 2),
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  hintText: "Enter your email",
+                  label: Text("Email")),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.purple),
+                color: Colors.black),
+            child: TextField(
+              obscureText: true,
+              controller: passwordController,
+              decoration: const InputDecoration(
+                  labelStyle: TextStyle(height: 2),
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  hintText: "Enter your password",
+                  label: Text("Password")),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.purple),
+                color: Colors.black),
+            child: TextField(
+              obscureText: true,
+              controller: repeatPasswordController,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(height: 2),
+                contentPadding: EdgeInsets.zero,
+                hintText: "Re-enter your password",
+                border: InputBorder.none,
+                label: Text("Re-enter Password"),
+              ),
+            ),
+          ),
+          ElevatedButton(onPressed: register, child: const Text("Register")),
+          const TextButton(
+              onPressed: null, child: Text("Already have an account?"))
+        ],
       ),
     );
   }

@@ -1,11 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chatapp/main.dart';
 import 'package:chatapp/screens/gc_messages_screen.dart';
+import 'package:chatapp/screens/login_screen.dart';
+import 'package:chatapp/screens/registration_screen.dart';
 import 'package:chatapp/screens/room_info_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:chatapp/screens/user_screen.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Page,Route', routes: [
+  AutoRoute(
+      path: RegistrationScreen.routeName,
+      name: 'RegistrationRouter',
+      page: RegistrationScreen),
+  AutoRoute(
+      path: LoginScreen.routeName, name: 'LoginRouter', page: LoginScreen),
   AutoRoute(
     path: LandingScreen.routeName,
     name: 'LandingRouter',

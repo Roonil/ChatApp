@@ -11,25 +11,41 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i6;
-import 'package:flutter/material.dart' as _i7;
+import 'package:auto_route/auto_route.dart' as _i8;
+import 'package:flutter/material.dart' as _i9;
 
-import '../main.dart' as _i1;
-import '../screens/gc_messages_screen.dart' as _i2;
-import '../screens/room_info_screen.dart' as _i3;
-import '../screens/rooms_screen.dart' as _i4;
-import '../screens/user_screen.dart' as _i5;
+import '../main.dart' as _i3;
+import '../screens/gc_messages_screen.dart' as _i4;
+import '../screens/login_screen.dart' as _i2;
+import '../screens/registration_screen.dart' as _i1;
+import '../screens/room_info_screen.dart' as _i5;
+import '../screens/rooms_screen.dart' as _i6;
+import '../screens/user_screen.dart' as _i7;
 
-class AppRouter extends _i6.RootStackRouter {
-  AppRouter([_i7.GlobalKey<_i7.NavigatorState>? navigatorKey])
+class AppRouter extends _i8.RootStackRouter {
+  AppRouter([_i9.GlobalKey<_i9.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i6.PageFactory> pagesMap = {
-    LandingRouter.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
+  final Map<String, _i8.PageFactory> pagesMap = {
+    RegistrationRouter.name: (routeData) {
+      final args = routeData.argsAs<RegistrationRouterArgs>(
+          orElse: () => const RegistrationRouterArgs());
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i1.LandingScreen(),
+        child: _i1.RegistrationScreen(key: args.key),
+      );
+    },
+    LoginRouter.name: (routeData) {
+      return _i8.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i2.LoginScreen(),
+      );
+    },
+    LandingRouter.name: (routeData) {
+      return _i8.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i3.LandingScreen(),
       );
     },
     GCMessageRouter.name: (routeData) {
@@ -37,9 +53,9 @@ class AppRouter extends _i6.RootStackRouter {
       final args = routeData.argsAs<GCMessageRouterArgs>(
           orElse: () =>
               GCMessageRouterArgs(roomId: pathParams.getInt('roomId')));
-      return _i6.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i2.GCMessagesScreen(
+        child: _i4.GCMessagesScreen(
           roomId: args.roomId,
           key: args.key,
         ),
@@ -50,51 +66,59 @@ class AppRouter extends _i6.RootStackRouter {
       final args = routeData.argsAs<RoomInfoRouterArgs>(
           orElse: () =>
               RoomInfoRouterArgs(roomId: pathParams.getInt('roomId')));
-      return _i6.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i3.RoomInfoScreen(
+        child: _i5.RoomInfoScreen(
           roomId: args.roomId,
           key: args.key,
         ),
       );
     },
     RoomsRouter.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i4.RoomsScreen(),
+        child: const _i6.RoomsScreen(),
       );
     },
     UserRouter.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
+      return _i8.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i5.UserScreen(),
+        child: const _i7.UserScreen(),
       );
     },
   };
 
   @override
-  List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(
+  List<_i8.RouteConfig> get routes => [
+        _i8.RouteConfig(
+          RegistrationRouter.name,
+          path: '/register',
+        ),
+        _i8.RouteConfig(
+          LoginRouter.name,
+          path: '/login',
+        ),
+        _i8.RouteConfig(
           LandingRouter.name,
           path: '/',
           children: [
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               RoomsRouter.name,
               path: 'rooms/',
               parent: LandingRouter.name,
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               UserRouter.name,
               path: 'user',
               parent: LandingRouter.name,
             ),
           ],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           GCMessageRouter.name,
           path: ':roomId',
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           RoomInfoRouter.name,
           path: 'room-info/:roomId',
         ),
@@ -102,9 +126,45 @@ class AppRouter extends _i6.RootStackRouter {
 }
 
 /// generated route for
-/// [_i1.LandingScreen]
-class LandingRouter extends _i6.PageRouteInfo<void> {
-  const LandingRouter({List<_i6.PageRouteInfo>? children})
+/// [_i1.RegistrationScreen]
+class RegistrationRouter extends _i8.PageRouteInfo<RegistrationRouterArgs> {
+  RegistrationRouter({_i9.Key? key})
+      : super(
+          RegistrationRouter.name,
+          path: '/register',
+          args: RegistrationRouterArgs(key: key),
+        );
+
+  static const String name = 'RegistrationRouter';
+}
+
+class RegistrationRouterArgs {
+  const RegistrationRouterArgs({this.key});
+
+  final _i9.Key? key;
+
+  @override
+  String toString() {
+    return 'RegistrationRouterArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i2.LoginScreen]
+class LoginRouter extends _i8.PageRouteInfo<void> {
+  const LoginRouter()
+      : super(
+          LoginRouter.name,
+          path: '/login',
+        );
+
+  static const String name = 'LoginRouter';
+}
+
+/// generated route for
+/// [_i3.LandingScreen]
+class LandingRouter extends _i8.PageRouteInfo<void> {
+  const LandingRouter({List<_i8.PageRouteInfo>? children})
       : super(
           LandingRouter.name,
           path: '/',
@@ -115,11 +175,11 @@ class LandingRouter extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.GCMessagesScreen]
-class GCMessageRouter extends _i6.PageRouteInfo<GCMessageRouterArgs> {
+/// [_i4.GCMessagesScreen]
+class GCMessageRouter extends _i8.PageRouteInfo<GCMessageRouterArgs> {
   GCMessageRouter({
     required int roomId,
-    _i7.Key? key,
+    _i9.Key? key,
   }) : super(
           GCMessageRouter.name,
           path: ':roomId',
@@ -141,7 +201,7 @@ class GCMessageRouterArgs {
 
   final int roomId;
 
-  final _i7.Key? key;
+  final _i9.Key? key;
 
   @override
   String toString() {
@@ -150,11 +210,11 @@ class GCMessageRouterArgs {
 }
 
 /// generated route for
-/// [_i3.RoomInfoScreen]
-class RoomInfoRouter extends _i6.PageRouteInfo<RoomInfoRouterArgs> {
+/// [_i5.RoomInfoScreen]
+class RoomInfoRouter extends _i8.PageRouteInfo<RoomInfoRouterArgs> {
   RoomInfoRouter({
     required int roomId,
-    _i7.Key? key,
+    _i9.Key? key,
   }) : super(
           RoomInfoRouter.name,
           path: 'room-info/:roomId',
@@ -176,7 +236,7 @@ class RoomInfoRouterArgs {
 
   final int roomId;
 
-  final _i7.Key? key;
+  final _i9.Key? key;
 
   @override
   String toString() {
@@ -185,8 +245,8 @@ class RoomInfoRouterArgs {
 }
 
 /// generated route for
-/// [_i4.RoomsScreen]
-class RoomsRouter extends _i6.PageRouteInfo<void> {
+/// [_i6.RoomsScreen]
+class RoomsRouter extends _i8.PageRouteInfo<void> {
   const RoomsRouter()
       : super(
           RoomsRouter.name,
@@ -197,8 +257,8 @@ class RoomsRouter extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.UserScreen]
-class UserRouter extends _i6.PageRouteInfo<void> {
+/// [_i7.UserScreen]
+class UserRouter extends _i8.PageRouteInfo<void> {
   const UserRouter()
       : super(
           UserRouter.name,

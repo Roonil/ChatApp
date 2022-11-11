@@ -26,6 +26,7 @@ void main() {
 
   //String? token;
   TestRegistration.register(
+      name: user.name,
       email: user.email,
       password: "user.password",
       username: user.profile.userName);
@@ -78,8 +79,11 @@ class _MyAppState extends State<MyApp> {
       currentUser.setToken = token;
     });
 
-    // return const MaterialApp(
+    // return MaterialApp(
     //   home: LoginScreen(),
+    //   theme: theme,
+    //   darkTheme: darkTheme,
+    //   themeMode: ThemeMode.dark,
     // );
 
     return MaterialApp.router(
