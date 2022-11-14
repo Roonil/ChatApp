@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   curved_navigation_bar: ^0.3.4
   drift: ^2.2.0
+  email_validator: ^2.1.17
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.2.1

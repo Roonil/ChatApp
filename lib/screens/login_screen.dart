@@ -30,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final Key _formKey = GlobalKey<FormState>();
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   void login(BuildContext context) {
     // final CurrentUser currentUser =
     //     Provider.of<CurrentUser>(context, listen: false);
@@ -87,12 +86,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 30.0),
                       Form(
                           key: _formKey,
+                          // autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Column(
                             children: [
                               Container(
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
-                                child: TextField(
+                                child: TextFormField(
+                                  // validator: (text) {
+                                  //   if (text == null || text.isEmpty) {
+                                  //     return 'please enter a username';
+                                  //   }
+                                  //   if (text.length < 4) {
+                                  //     return 'Too short username';
+                                  //   }
+                                  //   return null;
+                                  // },
                                   controller: userNameController,
                                   decoration: ThemeHelper().textInputDecoration(
                                       'User Name', 'Enter your user name'),
