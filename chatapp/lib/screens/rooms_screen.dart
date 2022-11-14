@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:chatapp/remote/remote_room.dart';
 import 'package:chatapp/router/router.gr.dart';
 import 'package:chatapp/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,9 @@ import '../widgets/modal_add_new_room.dart';
 
 class RoomsScreen extends StatefulWidget {
   static AppBar appBar(BuildContext context) {
-    final Rooms rooms = Provider.of<Rooms>(context);
+    final Rooms rooms = Provider.of<Rooms>(context, listen: false);
+    // List<Room> rooms1 = [];
+    RemoteRoom.searchRooms(context);
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 3,
@@ -26,20 +29,21 @@ class RoomsScreen extends StatefulWidget {
                 //   useRootNavigator: true,
                 context: context,
                 delegate: SearchPage(
-                    barTheme: Theme.of(context).copyWith(
-                        appBarTheme: AppBarTheme(
-                            color: Theme.of(context).primaryColor,
-                            elevation: 3)),
-                    builder: (Room room) => RoomTile(
-                        onTap: (_, __) => context.router
-                            .push(RoomInfoRouter(roomId: room.id)),
-                        onSwipe: null,
-                        tileKey: room.id,
-                        room: room),
-                    filter: (Room room) => [
-                          room.roomName,
-                        ],
-                    items: rooms.listify())),
+                  barTheme: Theme.of(context).copyWith(
+                      appBarTheme: AppBarTheme(
+                          color: Theme.of(context).primaryColor, elevation: 3)),
+                  builder: (Room room) => RoomTile(
+                      onTap: (_, __) =>
+                          context.router.push(RoomInfoRouter(roomId: room.id)),
+                      onSwipe: null,
+                      tileKey: room.id,
+                      room: room),
+                  filter: (Room room) => [
+                    room.roomName,
+                  ],
+                  items: rooms.searchListify(),
+                )),
+            // items: rooms.listify())),
             icon: Icon(
               Icons.search,
               color: Theme.of(context).textTheme.bodySmall?.color,

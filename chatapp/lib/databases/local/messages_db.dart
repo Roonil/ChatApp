@@ -15,7 +15,7 @@ class MessagesDb {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'messages.db');
-    //deleteDatabase(path);
+    // deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 

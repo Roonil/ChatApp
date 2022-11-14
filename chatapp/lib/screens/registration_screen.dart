@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:chatapp/router/router.gr.dart';
+import 'package:chatapp/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../remote/register.dart';
 
 class RegistrationScreen extends StatelessWidget {
-  static const routeName = '/register';
+  static const routeName = 'register';
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -120,8 +123,13 @@ class RegistrationScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(onPressed: register, child: const Text("Register")),
-          const TextButton(
-              onPressed: null, child: Text("Already have an account?"))
+          TextButton(
+              onPressed: () => context.router.pop().then((value) =>
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()))),
+              child: const Text("Already have an account?"))
         ],
       ),
     );

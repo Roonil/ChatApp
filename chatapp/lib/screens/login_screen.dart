@@ -17,7 +17,7 @@ import '../remote/login.dart';
 import '../widgets/header_widget.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const routeName = "/login";
+  static const routeName = "login";
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -32,19 +32,25 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   void login(BuildContext context) {
-    final CurrentUser currentUser =
-        Provider.of<CurrentUser>(context, listen: false);
-    final User user =
-        Provider.of<Users>(context, listen: false).withId(currentUser.userId);
+    // final CurrentUser currentUser =
+    //     Provider.of<CurrentUser>(context, listen: false);
+    // final User user =
+    //     Provider.of<Users>(context, listen: false).withId(currentUser.userId);
     TestLogin.login(
             password: passwordController.text,
             username: userNameController.text)
         .then((response) {
       String token = jsonDecode(response)["token"];
-
+      final User user = User.fromJson(jsonDecode(response)['user']);
+      Provider.of<Users>(context, listen: false).addUser(user);
+      final CurrentUser currentUser =
+          Provider.of<CurrentUser>(context, listen: false);
       currentUser.setToken = token;
-
-      //context.router.replace(const LandingRouter());
+      currentUser.setId = user.id;
+      currentUser.setUser = user;
+      //  runApp(MyApp());
+      // context.router.replace<LoginRouter>(LandingRouter());
+      context.router.popAndPush(const LandingRouter());
       // Navigator.pushReplacement(context,
       //     MaterialPageRoute(builder: (context) => const LandingScreen()));
     });

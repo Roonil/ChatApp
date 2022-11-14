@@ -14,7 +14,7 @@ class TestRegistration {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           "email": email,
-          "name": name,
+          "fullName": name,
           "userName": username,
           "password": password,
         }));

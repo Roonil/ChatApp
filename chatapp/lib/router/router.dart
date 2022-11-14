@@ -9,16 +9,16 @@ import 'package:chatapp/screens/user_screen.dart';
 
 @MaterialAutoRouter(replaceInRouteName: 'Page,Route', routes: [
   AutoRoute(
-      path: RegistrationScreen.routeName,
-      name: 'RegistrationRouter',
-      page: RegistrationScreen),
-  AutoRoute(
-      path: LoginScreen.routeName, name: 'LoginRouter', page: LoginScreen),
-  AutoRoute(
     path: LandingScreen.routeName,
     name: 'LandingRouter',
     page: LandingScreen,
     children: [
+      AutoRoute(
+          path: LoginScreen.routeName, name: 'LoginRouter', page: LoginScreen),
+      AutoRoute(
+          path: RegistrationScreen.routeName,
+          name: 'RegistrationRouter',
+          page: RegistrationScreen),
       AutoRoute(
           path: RoomsScreen.routeName, name: 'RoomsRouter', page: RoomsScreen),
       AutoRoute(

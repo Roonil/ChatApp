@@ -19,6 +19,21 @@ class User {
       //this.createdAt = DateTime.now();
       });
 
+  factory User.fromJson(dynamic json) {
+    return User(
+        createdAt: DateTime.parse(json['createdAt']),
+        email: json['email'],
+        id: json['id'],
+        name: json['userName'],
+        profile: Profile(
+            bio: json['bio'],
+            createdAt: DateTime.parse(json['createdAt']),
+            id: json['id'],
+            userId: json['id'],
+            userName: json['userName']),
+        role: json['role']);
+  }
+
   User.clone(User user)
       : this(
             email: user.email,

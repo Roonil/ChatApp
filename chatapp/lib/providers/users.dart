@@ -13,30 +13,31 @@ class Users extends ChangeNotifier {
   static final Uri _url = Uri.parse("http://10.0.2.2:3306/api/user/signup");
   static final List<User> _users = [
     User(
-        id: 1,
+        id: 100,
         email: "anandverma458@gmail.com",
         name: "Anand Verma",
         role: "admin",
         profile: Profiles().withId(1),
         createdAt: DateTime.now()),
     User(
-        id: 2,
+        id: 200,
         email: "dpack@gmail.com",
         name: "Deepak Khattar",
         role: "admin",
         profile: Profiles().withId(2),
         createdAt: DateTime.now()),
-    User(
-        id: 3,
-        email: "hwi@hmail.com",
-        name: "Random Name",
-        role: "user",
-        profile: Profiles().withId(3),
-        createdAt: DateTime.now()),
+    // User(
+    //     id: 3,
+    //     email: "hwi@hmail.com",
+    //     name: "Random Name",
+    //     role: "user",
+    //     profile: Profiles().withId(3),
+    //     createdAt: DateTime.now()),
   ];
 
   User withId(int id) {
-    return User.clone(_users.firstWhere((user) => user.id == id));
+    return _users.firstWhere((user) => user.id == id);
+    //return User.clone(_users.firstWhere((user) => user.id == id));
   }
 
   Future<String?> register(
@@ -72,6 +73,11 @@ class Users extends ChangeNotifier {
       return params["token"];
     }
     return null;
+  }
+
+  void addUser(User user) {
+    _users.add(user);
+    notifyListeners();
   }
 
   // User? login(String email, String password) {

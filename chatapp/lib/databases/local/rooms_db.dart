@@ -16,7 +16,7 @@ class RoomsDb {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'rooms.db');
-    // deleteDatabase(path);
+    //deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
