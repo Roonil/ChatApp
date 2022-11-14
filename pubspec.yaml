@@ -34,6 +34,7 @@ dependencies:
   drift: ^2.2.0
   flutter:
     sdk: flutter
+<<<<<<< HEAD:pubspec.yaml
   font_awesome_flutter: ^10.2.1
   google_fonts: ^3.0.1
   google_nav_bar: ^5.0.6
@@ -50,6 +51,32 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.0
   swipe_to: ^1.0.2
   term_glyph: ^1.2.1
+=======
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  google_nav_bar: ^5.0.6
+  curved_navigation_bar: ^0.3.4
+  intl: ^0.17.0
+  simple_animations: ^5.0.0+2
+  font_awesome_flutter: ^10.2.1
+  badges: ^2.0.3
+  auto_route: ^5.0.2
+  swipe_to: ^1.0.2
+  provider: ^6.0.4
+  search_page: ^2.2.0
+  hexcolor: ^3.0.1
+  term_glyph: ^1.2.1
+  http: ^0.13.5
+  sqflite: ^2.1.0+1
+  path: ^1.8.2
+  scrollable_positioned_list: ^0.3.5
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.11
+  drift: ^2.2.0
+>>>>>>> Anand_contrib:chatapp/pubspec.yaml
 
 dev_dependencies:
   auto_route_generator: ^5.0.2
@@ -62,8 +89,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+<<<<<<< HEAD:pubspec.yaml
   flutter_test:
     sdk: flutter
+=======
+  auto_route_generator: ^5.0.2
+  drift_dev: ^2.2.0+1
+  build_runner: ^2.3.0
+>>>>>>> Anand_contrib:chatapp/pubspec.yaml
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -89,9 +122,15 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+<<<<<<< HEAD:pubspec.yaml
     - family: FiraCode
       fonts:
         - asset: assets/fonts/FiraCode-Regular.ttf
+=======
+     - family: FiraCode
+       fonts:
+         - asset: assets/fonts/FiraCode-Regular.ttf
+>>>>>>> Anand_contrib:chatapp/pubspec.yaml
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
