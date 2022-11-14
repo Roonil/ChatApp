@@ -22,13 +22,14 @@ import 'remote/register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final User user = Users().withId(1);
+  // final User user = Users().withId(1);
 
   //String? token;
-  TestRegistration.register(
-      email: user.email,
-      password: "user.password",
-      username: user.profile.userName);
+  // TestRegistration.register(
+  //     name: user.name,
+  //     email: user.email,
+  //     password: "user.password",
+  //     username: user.profile.userName);
 
   // TestLogin.login(password: "user.password", username: user.profile.userName)
   //     .then((response) {
@@ -67,19 +68,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final CurrentUser currentUser =
-        Provider.of<CurrentUser>(context, listen: false);
-    final User user =
-        Provider.of<Users>(context, listen: false).withId(currentUser.userId);
-    TestLogin.login(password: "user.password", username: user.profile.userName)
-        .then((response) {
-      String token = jsonDecode(response)["token"];
+    // final CurrentUser currentUser =
+    //     Provider.of<CurrentUser>(context, listen: false);
+    // final User user =
+    //     Provider.of<Users>(context, listen: false).withId(currentUser.userId);
+    // TestLogin.login(password: "user.password", username: user.profile.userName)
+    //     .then((response) {
+    //   String token = jsonDecode(response)["token"];
 
-      currentUser.setToken = token;
-    });
+    //   currentUser.setToken = token;
+    // });
 
-    // return const MaterialApp(
+    // return MaterialApp(
     //   home: LoginScreen(),
+    //   theme: theme,
+    //   darkTheme: darkTheme,
+    //   themeMode: ThemeMode.dark,
     // );
 
     return MaterialApp.router(
@@ -100,6 +104,7 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = Provider.of<CurrentUser>(context, listen: false);
     // final Users users = Provider.of(context);
 
     // users
@@ -110,13 +115,24 @@ class LandingScreen extends StatelessWidget {
     //         userName: "Kahoot")
     //     .then((token) =>
     //         Provider.of<CurrentUser>(context, listen: false).setToken = token);
-    return AutoTabsScaffold(
-      appBarBuilder: (context, tabsRouter) => tabsRouter.activeIndex == 1
-          ? UserScreen.appBar(context)
-          : RoomsScreen.appBar(context),
-      routes: const [RoomsRouter(), UserRouter()],
-      bottomNavigationBuilder: (context, tabsRouter) =>
-          BottomNavBar(tabsRouter: tabsRouter),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AutoTabsScaffold(
+        appBarBuilder: currentUser.token == null
+            ? null
+            : (context, tabsRouter) => tabsRouter.activeIndex == 1
+                ? UserScreen.appBar(context)
+                : RoomsScreen.appBar(context),
+        routes: currentUser.token == null
+            ? [
+                RegistrationRouter(),
+                // const LoginRouter(),
+              ]
+            : [const RoomsRouter(), const UserRouter()],
+        bottomNavigationBuilder: currentUser.token == null
+            ? null
+            : (context, tabsRouter) => BottomNavBar(tabsRouter: tabsRouter),
+      ),
     );
   }
 }

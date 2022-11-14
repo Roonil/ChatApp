@@ -25,7 +25,7 @@ class Message {
         id: json['id'],
         receiverId: json['receiverId'] == 0 ? null : json['receiverId'],
         responseTo: json['responseTo'] == 0 ? null : json['responseTo'],
-        responses: List.from(((json['responses']))),
+        responses: List.from(((json['responses'] ?? []))),
         roomId: json['roomId'],
         threadId: json['threadId'],
         userId: json['userId'],

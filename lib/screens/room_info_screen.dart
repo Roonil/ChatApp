@@ -20,13 +20,16 @@ class RoomInfoScreen extends StatefulWidget {
 class _RoomInfoScreenState extends State<RoomInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    final Users users = Provider.of<Users>(context, listen: false);
-    final int currentUser =
-        Provider.of<CurrentUser>(context, listen: false).userId;
+    final User? currentUser =
+        Provider.of<CurrentUser>(context, listen: false).user;
+
     final Room room =
         Provider.of<Rooms>(context, listen: false).withId(widget.roomId);
-    final User hostUser =
-        Provider.of<Users>(context, listen: false).withId(room.hostId);
+
+    // final User hostUser = room.host;
+    final String hostName = room.hostName;
+    // final User hostUser =
+    //     Provider.of<Users>(context, listen: false).withId(room.hostId);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,19 +62,26 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
               height: 15,
             ),
             Text(
-              "Created By: ${hostUser.name}",
+              "Created By: $hostName",
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(
               height: 15,
             ),
-            room.members.contains(currentUser)
+            room.members.contains(currentUser?.profile.userName)
                 ? Container()
                 : Align(
                     alignment: Alignment.center,
                     child: ElevatedButton(
                       onPressed: () => setState(() {
-                        room.addUser(currentUser);
+                        Provider.of<Rooms>(context, listen: false)
+                            .joinRoom(room: room, context: context);
+                        // Provider.of<Rooms>(context, listen: false).addRoom(
+                        //     room.roomName,
+                        //     room.description,
+                        //     room.topics,
+                        //     context);
+                        room.addUser(currentUser?.profile.userName ?? "");
                       }),
                       child: const Text(
                         "Join Room",
@@ -95,7 +105,7 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: room.members.length,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(users.withId(room.members[index]).name),
+                  title: Text(room.members[index]),
                 ),
               ),
             )

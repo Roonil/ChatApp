@@ -1,13 +1,23 @@
+import 'dart:convert';
+
+import 'package:auto_route/auto_route.dart';
+import 'package:chatapp/main.dart';
+import 'package:chatapp/router/router.gr.dart';
 import 'package:chatapp/screens/registration_screen.dart';
 import 'package:chatapp/screens/rooms_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../common/theme_helper.dart';
+import '../models/user.dart';
+import '../providers/current_user.dart';
+import '../providers/users.dart';
+import '../remote/login.dart';
 import '../widgets/header_widget.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const routeName = "/login";
+  static const routeName = "login";
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -18,11 +28,38 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final double _headerHeight = 250;
   final Key _formKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void login(BuildContext context) {
+    // final CurrentUser currentUser =
+    //     Provider.of<CurrentUser>(context, listen: false);
+    // final User user =
+    //     Provider.of<Users>(context, listen: false).withId(currentUser.userId);
+    TestLogin.login(
+            password: passwordController.text,
+            username: userNameController.text)
+        .then((response) {
+      String token = jsonDecode(response)["token"];
+      final User user = User.fromJson(jsonDecode(response)['user']);
+      Provider.of<Users>(context, listen: false).addUser(user);
+      final CurrentUser currentUser =
+          Provider.of<CurrentUser>(context, listen: false);
+      currentUser.setToken = token;
+      currentUser.setId = user.id;
+      currentUser.setUser = user;
+      //  runApp(MyApp());
+      // context.router.replace<LoginRouter>(LandingRouter());
+      context.router.popAndPush(const LandingRouter());
+      // Navigator.pushReplacement(context,
+      //     MaterialPageRoute(builder: (context) => const LandingScreen()));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -56,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
+                                  controller: userNameController,
                                   decoration: ThemeHelper().textInputDecoration(
                                       'User Name', 'Enter your user name'),
                                 ),
@@ -65,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextField(
+                                  controller: passwordController,
                                   obscureText: true,
                                   decoration: ThemeHelper().textInputDecoration(
                                       'Password', 'Enter your password'),
@@ -91,6 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration:
                                     ThemeHelper().buttonBoxDecoration(context),
                                 child: ElevatedButton(
+                                  onPressed: () {
+                                    login(context);
+                                  },
                                   style: ThemeHelper().buttonStyle(),
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(
@@ -103,14 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    //After successful login we will redirect to profile page. Let's create profile page now
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                 const RoomsScreen()));
-                                  },
                                 ),
                               ),
                               Container(
@@ -128,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const RegistrationPage()));
+                                                    RegistrationScreen()));
                                       },
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
