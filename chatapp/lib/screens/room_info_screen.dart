@@ -6,7 +6,6 @@ import '../providers/current_user.dart';
 import '../providers/rooms.dart';
 import '../providers/room.dart';
 import '../models/user.dart';
-import '../providers/users.dart';
 
 class RoomInfoScreen extends StatefulWidget {
   static const routeName = "room-info/";

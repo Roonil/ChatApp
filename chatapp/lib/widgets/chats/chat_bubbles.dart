@@ -10,10 +10,10 @@ import 'connector.dart';
 import 'bubble_body.dart';
 
 // ignore: must_be_immutable
-class ChatBubbles extends StatelessWidget {
+class ChatBubbles extends StatefulWidget {
   final Message message;
   final Message? replyTo;
-  final void Function(int) drawReplyBox;
+  final void Function(int, String) drawReplyBox;
   late String messageBody;
   late int messageUserId, messageId;
   late int? threadId;
@@ -32,12 +32,18 @@ class ChatBubbles extends StatelessWidget {
   }
 
   @override
+  State<ChatBubbles> createState() => _ChatBubblesState();
+}
+
+class _ChatBubblesState extends State<ChatBubbles> {
+  @override
   Widget build(BuildContext context) {
     final userId = Provider.of<CurrentUser>(context).userId;
+
     const MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start;
     final textDirection =
-        messageUserId == userId ? TextDirection.rtl : TextDirection.ltr;
-    return replyTo == null
+        widget.messageUserId == userId ? TextDirection.rtl : TextDirection.ltr;
+    return widget.replyTo == null
         ? Row(
             textBaseline: TextBaseline.alphabetic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -46,10 +52,10 @@ class ChatBubbles extends StatelessWidget {
             children: [
               SwipeTo(
                 onRightSwipe: () {
-                  drawReplyBox(messageId);
+                  widget.drawReplyBox(widget.messageId, widget.messageBody);
                 },
                 child: BubbleBody(
-                  body: messageBody,
+                  body: widget.messageBody,
                   bottomMargin: 14,
                   isParent: false,
                 ),
@@ -63,13 +69,13 @@ class ChatBubbles extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                messageUserId == userId
+                widget.messageUserId == userId
                     ? const Connector(mode: Mode.topRight)
                     : const Connector(
                         mode: Mode.topLeft,
                       ),
                 BubbleBody(
-                  body: replyTo?.body as String,
+                  body: widget.replyTo?.body as String,
                   isParent: true,
                 ),
               ],
@@ -80,15 +86,15 @@ class ChatBubbles extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                userId == messageUserId
+                userId == widget.messageUserId
                     ? const Connector(mode: Mode.bottomRight)
                     : const Connector(mode: Mode.bottomLeft),
                 SwipeTo(
                   onRightSwipe: () {
-                    drawReplyBox(messageId);
+                    widget.drawReplyBox(widget.messageId, widget.messageBody);
                   },
                   child: BubbleBody(
-                    body: messageBody,
+                    body: widget.messageBody,
                     bottomMargin: 14,
                     isParent: false,
                   ),

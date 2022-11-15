@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:chatapp/providers/sockets.dart';
 import 'package:chatapp/screens/login_screen.dart';
 import 'package:chatapp/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -43,6 +45,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => Rooms()),
         ChangeNotifierProvider(create: (context) => Profiles()),
+        ChangeNotifierProvider(create: (context) => MessagesSocket()),
         ChangeNotifierProvider(create: (context) => Users()),
         ChangeNotifierProvider(create: (context) => Messages()),
         ChangeNotifierProvider(create: (context) => Rooms().at(1)),
@@ -105,6 +108,7 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<CurrentUser>(context, listen: false);
+    print(currentUser.token);
     // final Users users = Provider.of(context);
 
     // users

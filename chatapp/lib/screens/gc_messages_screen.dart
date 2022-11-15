@@ -1,5 +1,7 @@
 import 'dart:math';
-
+import 'package:chatapp/providers/current_user.dart';
+import 'package:chatapp/providers/sockets.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:auto_route/auto_route.dart';
 import 'package:chatapp/models/message.dart';
 import 'package:chatapp/router/router.gr.dart';
@@ -17,12 +19,10 @@ int generateMessageId() {
 
 class GCMessagesScreen extends StatefulWidget {
   static const routeName = "messages";
+
   final int roomId;
   //final String roomName;
-  const GCMessagesScreen(
-      {@PathParam() required this.roomId,
-      //  @PathParam() required this.roomName,
-      Key? key})
+  const GCMessagesScreen({@PathParam() required this.roomId, Key? key})
       : super(key: key);
 
   @override
@@ -32,10 +32,12 @@ class GCMessagesScreen extends StatefulWidget {
 class _GCMessagesScreenState extends State<GCMessagesScreen> {
   int? parentId;
   int? threadId;
+  String? parentBody;
 
-  void drawReplyBox(int? id) {
+  void drawReplyBox(int? id, String body) {
     setState(() {
       parentId = id;
+      parentBody = body;
     });
   }
 
@@ -43,7 +45,27 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
 //TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
+    io.Socket socket =
+        Provider.of<MessagesSocket>(context, listen: false).socket;
+    socket.connect();
+
     final messages = Provider.of<Messages>(context);
+    final currentUserId =
+        Provider.of<CurrentUser>(context, listen: false).userId;
+
+    socket.on('room-${widget.roomId}', (message) {
+      if (message['responseTo'] != null &&
+          message['responseTo'].runtimeType == int) {
+        message['responseTo'] = message['responseTo']['id'];
+      }
+
+      if (message['userId'] != currentUserId) {
+        final messageObj = Message.fromJson((message));
+
+        messages.receiveMessage(message: messageObj);
+      }
+    });
+
     final String roomName =
         Provider.of<Rooms>(context).withId(widget.roomId).roomName;
     final messageController = TextEditingController();
@@ -55,37 +77,14 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
         return;
       }
       setState(() {
-        if (parentId != null) {
-          Message replyingTo = messages.withId(parentId as int);
-          int messageId = generateMessageId();
-
-          threadId = replyingTo.threadId ?? 1;
-          replyingTo.createThread(threadId, messageId);
-          //messageListController
-          //  .jumpTo(messageListController.position.maxScrollExtent);
-        }
-        messages.add(
+        messages.sendMessage(
             body: message,
             context: context,
             receiverId: 0,
             roomId: widget.roomId,
             threadId: parentId);
 
-        // messages.add(
-        //     Message(
-        //       roomId: widget.roomId,
-        //       userId: 1,
-        //       receiverId: 2,
-        //       responses: [],
-        //       createdAt: DateTime.now(),
-        //       responseTo: parentId,
-        //       threadId: threadId,
-        //       id: 2,
-        //       body: message,
-        //     ),
-        //     context);
         parentId = null;
-
         messageListController.jumpTo(index: 0);
       });
     }
@@ -105,8 +104,6 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
             borderRadius: BorderRadius.circular(20),
             onTap: () =>
                 context.router.push(RoomInfoRouter(roomId: widget.roomId)),
-            // onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
-            //     arguments: {'roomId': widget.roomId}),
             child: SizedBox(
               width: double.infinity,
               height: 60,
@@ -142,8 +139,10 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                           child: Row(
                             children: [
                               BubbleBody(
-                                  isParent: true,
-                                  body: messages.withId(parentId as int).body),
+                                isParent: true,
+                                body: parentBody ?? "",
+                                // body: messages.withId(parentId as int).body,
+                              ),
                               IconButton(
                                   icon: const Icon(Icons.cancel_outlined),
                                   onPressed: () => setState(() {
@@ -165,9 +164,6 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                             .copyWith(brightness: Brightness.light)
                             .cardColor),
                     child: TextField(
-                      // focusNode: FocusNode(
-                      //   canRequestFocus: true,
-                      // ),
                       onSubmitted: (value) => send(),
                       onEditingComplete: () {},
                       textInputAction: TextInputAction.go,

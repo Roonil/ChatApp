@@ -9,6 +9,7 @@ class UserScreen extends StatelessWidget {
   static const routeName = "user";
   static AppBar appBar(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       // leading: BackButton(
       //   onPressed: () => context.router.pop(),
       // ),

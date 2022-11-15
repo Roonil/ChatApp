@@ -8,8 +8,23 @@ import '../models/message.dart';
 import '../providers/current_user.dart';
 import '../strings/server_host.dart';
 
-class TestSendMessage {
+class RemoteMessage {
   static Uri url = Uri.parse("${serverHost}message/");
+
+  static void getMessages(
+      {required int roomId, required BuildContext context}) async {
+    final String? token =
+        Provider.of<CurrentUser>(context, listen: false).token;
+    final response = await (http.get(Uri.parse('$url?roomId=$roomId'),
+        headers: {'Authorization': token!}));
+
+    final json = jsonDecode(response.body);
+    List<Message> messages = [];
+    for (var message in json['messages']) {
+      messages.add(Message.fromJson(jsonEncode(message)));
+    }
+  }
+
   static Future<Message> sendMessage(
       {required String body,
       required int? roomId,
@@ -24,7 +39,7 @@ class TestSendMessage {
             "${url}send?receiverId=${receiverId?.toInt()}&roomId=$roomId&body=$body&threadId=${threadId?.toInt()}"),
         headers: {'Authorization': token!});
 
-    Map<String, dynamic> newJson = jsonDecode(response.body)['message'];
+    dynamic newJson = jsonDecode(response.body)['message'];
     List<dynamic> st = newJson['room']['topics'] as List<dynamic>;
     newJson['room']['topics'] = "";
     for (var element in st) {

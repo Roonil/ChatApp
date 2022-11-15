@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import '../models/topic.dart';
-import '../models/user.dart';
 
 class Room extends ChangeNotifier {
   final int id, hostId;
@@ -28,27 +26,22 @@ class Room extends ChangeNotifier {
     for (var topic in jsonDecode(json['topics'])) {
       topics.add(Topic.fromJson(topic));
     }
-    print("!!!!!1");
-    print(json['members']);
-    print(json);
+
     return Room(
-        hostName: ((json['host']['userName'])),
+        hostName: ((json['host']['fullName'])),
         description: json['description'] as String,
         hostId: json['hostId'] as int,
         id: json['id'] as int,
         members: json['members'] is String
             ? List<String>.from(jsonDecode(json['members']))
             : List<String>.from((json['members'])),
-        // members: json['members'] == [] || json['members'] == null
-        //     ? [""]
-        //     : ((json['members'])),
         roomName: json['roomName'] as String,
         topics: topics);
   }
 
   Map toJson() => {
         "id": id,
-        "hostName": hostName,
+        "host": {'fullName': hostName},
         "hostId": hostId,
         "members": jsonEncode(members),
         "description": description,

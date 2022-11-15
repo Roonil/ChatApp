@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:chatapp/main.dart';
 import 'package:chatapp/router/router.gr.dart';
 import 'package:chatapp/screens/registration_screen.dart';
-import 'package:chatapp/screens/rooms_screen.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

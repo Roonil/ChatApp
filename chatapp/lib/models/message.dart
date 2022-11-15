@@ -24,7 +24,12 @@ class Message {
         body: json['body'] as String,
         id: json['id'],
         receiverId: json['receiverId'] == 0 ? null : json['receiverId'],
-        responseTo: json['responseTo'] == 0 ? null : json['responseTo'],
+        responseTo: json['responseTo'] == null || json['responseTo'] == 0
+            ? null
+            : json['responseTo'].runtimeType.toString() ==
+                    "_InternalLinkedHashMap<String, dynamic>"
+                ? json['responseTo']['id']
+                : json['responseTo'],
         responses: List.from(((json['responses'] ?? []))),
         roomId: json['roomId'],
         threadId: json['threadId'],

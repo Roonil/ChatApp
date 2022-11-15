@@ -1,11 +1,11 @@
 import 'package:chatapp/databases/local/messages_db.dart';
-import 'package:chatapp/remote/send_message.dart';
+import 'package:chatapp/remote/remote_message.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/message.dart';
 
 class Messages extends ChangeNotifier {
-  final List<Message> _messages = [
+  List<Message> _messages = [
     Message(
         roomId: 100,
         userId: 200,
@@ -71,17 +71,30 @@ class Messages extends ChangeNotifier {
     notifyListeners();
   }
 
+  void receiveMessage({required Message message}) {
+    //TODO: WONT WORK FOR MULTIPLE USERS...
+    if (_messages.last.id == message.id) return;
+    _messages.add(message);
+    MessagesDb.instance.addMessage(message);
+    notifyListeners();
+  }
+
   Message withId(int id) {
     return _messages.firstWhere((message) => message.id == id);
   }
 
-  void add(
+  void updateMessages(List<Message> messages) {
+    _messages = messages;
+    notifyListeners();
+  }
+
+  void sendMessage(
       {required String body,
       required int? roomId,
       required int? threadId,
       required int? receiverId,
       required BuildContext context}) async {
-    final Message message = await TestSendMessage.sendMessage(
+    final Message message = await RemoteMessage.sendMessage(
         receiverId: receiverId,
         body: body,
         roomId: roomId,

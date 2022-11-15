@@ -8,7 +8,7 @@ import 'chat_bubbles.dart';
 class MessagesList extends StatelessWidget {
   final List<Message> messages;
   final ItemScrollController messageListController;
-  final void Function(int) drawReplyBox;
+  final void Function(int, String) drawReplyBox;
 
   const MessagesList({
     Key? key,

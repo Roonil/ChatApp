@@ -18,35 +18,35 @@ class RemoteRoom {
   static void searchRooms(BuildContext context) async {
     final String? token =
         Provider.of<CurrentUser>(context, listen: false).token;
+    Rooms rooms = Provider.of<Rooms>(context, listen: false);
     final response = await (http
         .get(Uri.parse("$url?search"), headers: {"Authorization": token!}));
-    print(response.body);
 
-    final rooms = jsonDecode(response.body)['rooms'];
-    List<Room> listRooms = [];
-    for (Map<String, dynamic> room in rooms) {
+    final jsonRooms = jsonDecode(response.body)['rooms'];
+
+    for (Map<String, dynamic> room in jsonRooms) {
       List<dynamic> st = room['topics'] as List<dynamic>;
       room['topics'] = "";
       for (var element in st) {
         room['topics'] += element + ",";
       }
-      print("HIIIIIIIII");
-      print(room);
+
       room['topics'] = room['topics']
           .toString()
           .substring(0, room['topics'].toString().length - 1);
       room['members'] = [room['host']['userName'].toString()];
-      print("HI");
 
-      print(room);
-      Rooms rooms = Provider.of<Rooms>(context, listen: false);
       if (!rooms.isCached(room['id'])) {
         rooms.addToSearch([Room.fromJson(room)]);
       }
-      //listRooms.add(Room.fromJson(room));
     }
+  }
 
-    // return listRooms;
+  static void getJoinedRooms(BuildContext context) async {
+    final String? token =
+        Provider.of<CurrentUser>(context, listen: false).token;
+    final response = await (http
+        .get(Uri.parse("$url?search"), headers: {"Authorization": token!}));
   }
 
   static void joinRoom(
@@ -54,9 +54,8 @@ class RemoteRoom {
     final String? token =
         Provider.of<CurrentUser>(context, listen: false).token;
     final response = await http.post(Uri.parse("$url/join"),
-        headers: {"Authorization": token!},
-        body: {'roomId': roomId.toString()});
-    print(response.body);
+        headers: {"Authorization": token!, 'Content-Type': 'application/json'},
+        body: json.encode({'roomId': roomId}));
   }
 
   static Future<Room> createRoom({
@@ -78,7 +77,7 @@ class RemoteRoom {
         Uri.parse(
             "$url/create?roomName=$roomName&description=$description&topics=${stringTopics.toString()}"),
         headers: {"Authorization": token!});
-    print(response.body);
+
     Map<String, dynamic> newJson = jsonDecode(response.body)['room'];
 
     List<dynamic> st = newJson['topics'] as List<dynamic>;
@@ -89,9 +88,12 @@ class RemoteRoom {
     newJson['topics'] = newJson['topics']
         .toString()
         .substring(0, newJson['topics'].toString().length - 1);
-    print("DIDIIDID");
-    print(newJson['members']);
+
     newJson['members'] = [newJson['host']['userName'].toString()];
+    print("TESTTTT");
+    print(newJson['host']);
+    //TODO:CHANGE TO FULLNAME, remove this line
+    newJson['host']['fullName'] = newJson['host']['userName'];
     return Room.fromJson(newJson);
   }
 

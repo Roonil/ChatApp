@@ -18,7 +18,5 @@ class TestRegistration {
           "userName": username,
           "password": password,
         }));
-
-    print(response.body);
   }
 }

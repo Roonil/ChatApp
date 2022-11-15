@@ -1,14 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chatapp/remote/remote_room.dart';
-import 'package:chatapp/router/router.gr.dart';
-import 'package:chatapp/themes/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:search_page/search_page.dart';
 
 import '../providers/room.dart';
 import '../providers/rooms.dart';
-
+import '../remote/remote_room.dart';
+import '../router/router.gr.dart';
 import '../widgets/room_tile.dart';
 import '../widgets/rooms_list.dart';
 
@@ -17,16 +15,16 @@ import '../widgets/modal_add_new_room.dart';
 class RoomsScreen extends StatefulWidget {
   static AppBar appBar(BuildContext context) {
     final Rooms rooms = Provider.of<Rooms>(context, listen: false);
-    // List<Room> rooms1 = [];
+    rooms.getJoinedRooms(context);
     RemoteRoom.searchRooms(context);
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 3,
       title: const Text("Rooms"),
       actions: [
         IconButton(
             onPressed: () => showSearch(
-                //   useRootNavigator: true,
                 context: context,
                 delegate: SearchPage(
                   barTheme: Theme.of(context).copyWith(
@@ -43,7 +41,6 @@ class RoomsScreen extends StatefulWidget {
                   ],
                   items: rooms.searchListify(),
                 )),
-            // items: rooms.listify())),
             icon: Icon(
               Icons.search,
               color: Theme.of(context).textTheme.bodySmall?.color,
@@ -66,13 +63,6 @@ class RoomsScreen extends StatefulWidget {
                 );
               })),
         ),
-        // IconButton(
-        //     onPressed: () => Navigator.pushNamed(context, UserScreen.routeName,
-        //         arguments: {'id': 1}),
-        //     icon: Icon(
-        //       Icons.settings,
-        //       color: Theme.of(context).textTheme.bodySmall?.color,
-        //     ))
       ],
     );
   }
@@ -88,7 +78,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
   @override
   Widget build(BuildContext context) {
     final Rooms rooms = Provider.of<Rooms>(context);
-
     return RoomsList(rooms: rooms);
   }
 }

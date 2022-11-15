@@ -1,18 +1,36 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'package:chatapp/providers/current_user.dart';
+import 'package:chatapp/providers/sockets.dart';
+import 'package:chatapp/remote/remote_message.dart';
+import 'package:chatapp/strings/server_host.dart';
+import 'package:path/path.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:auto_route/auto_route.dart';
 import 'package:chatapp/models/message.dart';
-import 'package:chatapp/screens/room_info_screen.dart';
+import 'package:chatapp/router/router.gr.dart';
 import 'package:flutter/material.dart';
-import '../widgets/messages_list.dart';
-import 'package:chatapp/dummy_messages.dart';
+import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import '../providers/rooms.dart';
+import '../widgets/chats/bubble_body.dart';
+import '../widgets/chats/messages_list.dart';
+import 'package:chatapp/providers/messages.dart';
 
 int generateMessageId() {
   return Random().nextInt(10);
 }
 
 class GCMessagesScreen extends StatefulWidget {
-  static const routeName = "/messages";
-  const GCMessagesScreen({Key? key}) : super(key: key);
+  static const routeName = "messages";
+
+  final int roomId;
+  //final String roomName;
+  const GCMessagesScreen(
+      {@PathParam() required this.roomId,
+      //  @PathParam() required this.roomName,
+      Key? key})
+      : super(key: key);
 
   @override
   State<GCMessagesScreen> createState() => _GCMessagesScreenState();
@@ -21,147 +39,215 @@ class GCMessagesScreen extends StatefulWidget {
 class _GCMessagesScreenState extends State<GCMessagesScreen> {
   int? parentId;
   int? threadId;
+  String? parentBody;
 
-  void drawReplyBox(int? id) {
+  // io.Socket socket = io.io(
+  //     socketHost,
+  //     io.OptionBuilder()
+  //         .enableForceNewConnection()
+  //         .setTransports(['websocket'])
+  //         .disableAutoConnect()
+  //         .build());
+
+  void drawReplyBox(int? id, String body) {
     setState(() {
       parentId = id;
+      parentBody = body;
     });
   }
 
+// ignore: todo
 //TODO: Add threads on top with most activity
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map;
-    final int roomId = args['roomId'];
-    final String roomName = args['roomName'];
-    final messageController = TextEditingController();
+    io.Socket socket = Provider.of<MessagesSocket>(context).socket;
+    socket.connect();
+    socket.onConnect((_) {
+      print('connected');
+    });
+    final messages = Provider.of<Messages>(context);
+    final currentUserId =
+        Provider.of<CurrentUser>(context, listen: false).userId;
 
-    void sendMessage() {
+    // GCMessagesScreen.socket.once(
+    //     'room-${widget.roomId}',
+    //     (data) =>
+    //         RemoteMessage.getMessages(roomId: widget.roomId, context: context));
+
+    socket.once('room-${widget.roomId}', (message) {
+      print(widget.roomId);
+      print("Sike, received something!");
+      print(jsonEncode(message));
+      print(message['id']);
+      // GCMessagesScreen.socket.disconnect();
+
+      //  GCMessagesScreen.socket.disconnect();
+      if (message['responseTo'] != null &&
+          message['responseTo'].runtimeType == int) {
+        message['responseTo'] = message['responseTo']['id'];
+      }
+      print("CHECKING ");
+      print(message['userId']);
+      print(currentUserId);
+      if (message['userId'] != currentUserId) {
+        print("YOHOHO ACTUALLY A NEW MESSAGE");
+        final messageObj = Message.fromJson((message));
+        print("object");
+        print(messageObj.userId);
+        //  print(messageObj.responseTo);
+
+        messages.receiveMessage(message: messageObj);
+      } else {
+        print("FALSE ALARM!");
+      }
+    });
+
+    final String roomName =
+        Provider.of<Rooms>(context).withId(widget.roomId).roomName;
+    final messageController = TextEditingController();
+    final messageListController = ItemScrollController();
+
+    void send() {
+      print("SENDD");
       final message = messageController.text;
       if (message.isEmpty || message.trim().isEmpty) {
         return;
       }
       setState(() {
+        Message? replyingTo;
         if (parentId != null) {
-          Message replyingTo =
-              dummyMessages.firstWhere((message) => message.id == parentId);
+          replyingTo = messages.withId(parentId as int);
           int messageId = generateMessageId();
 
-          threadId = replyingTo.threadId ?? 1;
-          replyingTo.createThread(threadId, messageId);
+          //  threadId = replyingTo.id;
+          // replyingTo.createThread(threadId, messageId);
         }
-        dummyMessages.add(
-          Message(
-            roomId: roomId,
-            userId: 1,
-            receiverId: 2,
-            responses: [],
-            responseTo: parentId,
-            threadId: threadId,
-            id: 2,
+        messages.sendMessage(
             body: message,
-          ),
-        );
+            context: context,
+            receiverId: 0,
+            roomId: widget.roomId,
+            threadId: parentId);
+
+        //     GCMessagesScreen.socket.emit('room-${widget.roomId}', message.trim());
+
+        // messages.add(
+        //     Message(
+        //       roomId: widget.roomId,
+        //       userId: 1,
+        //       receiverId: 2,
+        //       responses: [],
+        //       createdAt: DateTime.now(),
+        //       responseTo: parentId,
+        //       threadId: threadId,
+        //       id: 2,
+        //       body: message,
+        //     ),
+        //     context);
+        parentId = null;
+
+        messageListController.jumpTo(index: 0);
       });
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 3,
-        leading: BackButton(
-          color: Theme.of(context).textTheme.bodySmall?.color,
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
-              arguments: {'roomId': roomId}),
-          child: SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                roomName,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 3,
+          leading: BackButton(
+            color: Theme.of(context).textTheme.bodySmall?.color,
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              Navigator.pop(context);
+            },
+          ),
+          title: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () =>
+                context.router.push(RoomInfoRouter(roomId: widget.roomId)),
+            // onTap: () => Navigator.pushNamed(context, RoomInfoScreen.routeName,
+            //     arguments: {'roomId': widget.roomId}),
+            child: SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  roomName,
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: Column(
-        children: [
-          Flexible(
-            child: MessagesList(
-              drawReplyBox: drawReplyBox,
-              messages: dummyMessages
-                  .where((dummyMessage) => dummyMessage.roomId == roomId)
-                  .toList(),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border:
-                      Border.all(color: Theme.of(context).primaryColorLight),
-                  color: Theme.of(context)
-                      .copyWith(brightness: Brightness.light)
-                      .cardColor),
-              child: Column(
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: MessagesList(
+                      messageListController: messageListController,
+                      drawReplyBox: drawReplyBox,
+                      messages: messages.inRoom(widget.roomId)),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   parentId != null
-                      ? Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 7),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 7),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white10,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            dummyMessages
-                                .firstWhere((message) => message.id == parentId)
-                                .body,
-                            overflow: TextOverflow.ellipsis,
+                      ? Flexible(
+                          flex: 0,
+                          child: Row(
+                            children: [
+                              BubbleBody(
+                                isParent: true,
+                                body: parentBody ?? "",
+                                // body: messages.withId(parentId as int).body,
+                              ),
+                              IconButton(
+                                  icon: const Icon(Icons.cancel_outlined),
+                                  onPressed: () => setState(() {
+                                        parentId = null;
+                                      })),
+                            ],
                           ),
                         )
                       : Container(),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: TextField(
-                          focusNode: FocusNode(
-                            canRequestFocus: true,
-                          ),
-                          onSubmitted: (value) => sendMessage(),
-                          textInputAction: TextInputAction.go,
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            hintText: "Message",
-                            border: InputBorder.none,
+                  Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                            color: Theme.of(context).primaryColorLight),
+                        color: Theme.of(context)
+                            .copyWith(brightness: Brightness.light)
+                            .cardColor),
+                    child: TextField(
+                      // focusNode: FocusNode(
+                      //   canRequestFocus: true,
+                      // ),
+                      onSubmitted: (value) => send(),
+                      onEditingComplete: () {},
+                      textInputAction: TextInputAction.go,
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: send,
+                          icon: const Icon(
+                            Icons.send,
                           ),
                         ),
+                        hintText: "Message",
+                        border: InputBorder.none,
                       ),
-                      IconButton(
-                        onPressed: sendMessage,
-                        icon: const Icon(
-                          Icons.send,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  )
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+            ]));
   }
 }

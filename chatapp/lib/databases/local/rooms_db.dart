@@ -16,7 +16,7 @@ class RoomsDb {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'rooms.db');
-    //deleteDatabase(path);
+    // deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
@@ -45,8 +45,6 @@ class RoomsDb {
     List<Map<String, Object?>> fetchedRooms = await db.query('rooms');
 
     for (var element in fetchedRooms) {
-      //  print(element);
-      //var test = jsonDecode(element['room'] as String);
       rooms.add(Room.fromJson(jsonDecode(element['room'] as String)));
     }
 

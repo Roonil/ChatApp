@@ -41,9 +41,14 @@ class Rooms with ChangeNotifier {
   Rooms() {
     RoomsDb.instance.getRooms().then((rooms) {
       _rooms.addAll(rooms);
+
       notifyListeners();
     });
   }
+  void getJoinedRooms(BuildContext context) {
+    RemoteRoom.getJoinedRooms(context);
+  }
+
   void addToSearch(List<Room> rooms) {
     _searchRooms.addAll(rooms);
   }
@@ -88,7 +93,9 @@ class Rooms with ChangeNotifier {
 
   void joinRoom({required Room room, required BuildContext context}) async {
     RemoteRoom.joinRoom(context: context, roomId: room.id);
+    RoomsDb.instance.addRoom(room);
     _rooms.add(room);
+    notifyListeners();
   }
 
   void addRoom(String roomName, String description, List<Topic> topics,
