@@ -51,62 +51,64 @@ class _ModalAddNewRoomState extends State<ModalAddNewRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      const Padding(
-        padding: EdgeInsets.all(7),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: TextField(
-          controller: _roomTitleController,
-          minLines: 1,
-          maxLines: 2,
-          maxLength: 32,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            alignLabelWithHint: true,
-            labelText: "Room Name",
-            hintText: "Enter Room Name",
+    return Card(
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        const Padding(
+          padding: EdgeInsets.all(7),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TextField(
+            controller: _roomTitleController,
+            minLines: 1,
+            maxLines: 2,
+            maxLength: 32,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              alignLabelWithHint: true,
+              labelText: "Room Name",
+              hintText: "Enter Room Name",
+            ),
           ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: TextField(
-          controller: _descriptionController,
-          minLines: 1,
-          maxLines: 5,
-          maxLength: 255,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            alignLabelWithHint: true,
-            labelText: "Description",
-            hintText: "Enter Description",
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TextField(
+            controller: _descriptionController,
+            minLines: 1,
+            maxLines: 5,
+            maxLength: 255,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              alignLabelWithHint: true,
+              labelText: "Description",
+              hintText: "Enter Description",
+            ),
           ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: TextField(
-          controller: _topicsController,
-          autocorrect: false,
-          decoration: const InputDecoration(
-            alignLabelWithHint: true,
-            labelText: "Tags",
-            hintText: "Enter Tags(separated with commas)",
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: TextField(
+            controller: _topicsController,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              alignLabelWithHint: true,
+              labelText: "Tags",
+              hintText: "Enter Tags(separated with commas)",
+            ),
           ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: ElevatedButton(
-            onPressed: (() => _addRoom()),
-            child: const Text("Create Room"),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: ElevatedButton(
+              onPressed: (() => _addRoom()),
+              child: const Text("Create Room"),
+            ),
           ),
         ),
-      ),
-    ]);
+      ]),
+    );
   }
 }

@@ -20,7 +20,7 @@ class RoomsScreen extends StatefulWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Theme.of(context).primaryColor,
-      elevation: 3,
+      elevation: 10,
       title: const Text("Rooms"),
       actions: [
         IconButton(
@@ -51,7 +51,7 @@ class RoomsScreen extends StatefulWidget {
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           onPressed: (() => showModalBottomSheet(
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: Colors.transparent,
               elevation: 10,
               isScrollControlled: true,
               context: context,

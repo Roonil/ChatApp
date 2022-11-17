@@ -17,6 +17,15 @@ class CurrentUser extends ChangeNotifier {
     userId = user?.id;
   }
 
+  void logOut() {
+    userId = null;
+    token = null;
+    user = null;
+    _removeSharedPrefToken();
+    _removeSharedPrefUser();
+    notifyListeners();
+  }
+
   void _removeSharedPrefToken() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');

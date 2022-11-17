@@ -65,7 +65,6 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<CurrentUser>(context);
-    print(currentUser.user);
     currentUser.user == null
         ? null
         : Provider.of<Users>(context, listen: false)

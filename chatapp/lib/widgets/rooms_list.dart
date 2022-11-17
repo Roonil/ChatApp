@@ -26,11 +26,14 @@ class RoomsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return RoomTile(
-            room: rooms.at(index),
-            onSwipe: (index) => deleteRoom(index, context),
-            tileKey: index,
-            onTap: openRoom);
+        return Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: RoomTile(
+              room: rooms.at(index),
+              onSwipe: (index) => deleteRoom(index, context),
+              tileKey: index,
+              onTap: openRoom),
+        );
       },
       itemCount: rooms.length(),
     );

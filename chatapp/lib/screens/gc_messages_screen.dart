@@ -92,7 +92,7 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          elevation: 3,
+          elevation: 10,
           leading: BackButton(
             color: Theme.of(context).textTheme.bodySmall?.color,
             onPressed: () {
@@ -160,15 +160,18 @@ class _GCMessagesScreenState extends State<GCMessagesScreen> {
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(
                             color: Theme.of(context).primaryColorLight),
-                        color: Theme.of(context)
-                            .copyWith(brightness: Brightness.light)
-                            .cardColor),
+                        color: Colors.transparent
+                        // color: Theme.of(context)
+                        //     .copyWith(brightness: Brightness.light)
+                        //     .cardColor,
+                        ),
                     child: TextField(
                       onSubmitted: (value) => send(),
                       onEditingComplete: () {},
                       textInputAction: TextInputAction.go,
                       controller: messageController,
                       decoration: InputDecoration(
+                        fillColor: Colors.transparent,
                         suffixIcon: IconButton(
                           onPressed: send,
                           icon: const Icon(

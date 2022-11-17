@@ -33,7 +33,7 @@ class _RoomInfoScreenState extends State<RoomInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        elevation: 3,
+        elevation: 10,
         title: const Text("Room Information"),
         leading: BackButton(onPressed: () {
           FocusScope.of(context).unfocus();

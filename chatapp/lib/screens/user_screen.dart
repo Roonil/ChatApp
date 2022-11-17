@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../providers/current_user.dart';
 import '../models/user.dart';
-import '../providers/users.dart';
 
 class UserScreen extends StatelessWidget {
   static const routeName = "user";
@@ -13,8 +12,13 @@ class UserScreen extends StatelessWidget {
       // leading: BackButton(
       //   onPressed: () => context.router.pop(),
       // ),
+      actions: [
+        IconButton(
+            onPressed: Provider.of<CurrentUser>(context).logOut,
+            icon: const Icon(Icons.logout))
+      ],
       backgroundColor: Theme.of(context).primaryColor,
-      elevation: 3,
+      elevation: 10,
       title: const Text("Profile"),
     );
   }
