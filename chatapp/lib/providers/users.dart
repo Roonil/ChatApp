@@ -37,7 +37,7 @@ class Users extends ChangeNotifier {
 
   User withId(int id) {
     return _users.firstWhere((user) => user.id == id);
-    //return User.clone(_users.firstWhere((user) => user.id == id));
+    return User.clone(_users.firstWhere((user) => user.id == id));
   }
 
   Future<String?> register(
@@ -77,7 +77,8 @@ class Users extends ChangeNotifier {
 
   void addUser(User user) {
     _users.add(user);
-    notifyListeners();
+    //TODO: check if commenting notifyListeners breaks anything
+    //notifyListeners();
   }
 
   // User? login(String email, String password) {

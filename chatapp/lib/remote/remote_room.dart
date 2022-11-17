@@ -56,6 +56,8 @@ class RemoteRoom {
     final response = await http.post(Uri.parse("$url/join"),
         headers: {"Authorization": token!, 'Content-Type': 'application/json'},
         body: json.encode({'roomId': roomId}));
+    print("JOINED");
+    print(response.body);
   }
 
   static Future<Room> createRoom({

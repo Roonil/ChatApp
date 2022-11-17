@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../databases/local/rooms_db.dart';
 import '../models/topic.dart';
-import '../models/user.dart';
-import 'profiles.dart';
 import 'room.dart';
 
 class Rooms with ChangeNotifier {

@@ -33,7 +33,14 @@ class User {
             userName: json['userName']),
         role: json['role']);
   }
-
+  Map toJson() => {
+        "createdAt": createdAt.toIso8601String(),
+        "email": email,
+        "id": id,
+        "name": name,
+        "profile": profile.toJson(),
+        "role": role,
+      };
   User.clone(User user)
       : this(
             email: user.email,

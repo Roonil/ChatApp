@@ -26,8 +26,13 @@ class UserScreen extends StatelessWidget {
     // final int userId =
     //     (ModalRoute.of(context)?.settings.arguments as Map)['id'];
     // final User user = Provider.of<Users>(context).withId(userId);
-    final User user = Provider.of<Users>(context, listen: false)
-        .withId(Provider.of<CurrentUser>(context).userId);
+
+    // final User user = Provider.of<Users>(context, listen: false)
+    //     .withId(Provider.of<CurrentUser>(context).userId ?? 0);
+
+    final User user =
+        Provider.of<CurrentUser>(context, listen: false).user as User;
+
     final nameController = TextEditingController(text: user.name);
     final bioController = TextEditingController(text: user.profile.bio);
 

@@ -11,4 +11,12 @@ class Profile {
     required this.userName,
     required this.createdAt,
   });
+
+  Map toJson() => {
+        "id": id,
+        "userId": userId,
+        "bio": bio,
+        "userName": userName,
+        "createdAt": createdAt.toIso8601String()
+      };
 }

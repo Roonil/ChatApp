@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     //     Provider.of<CurrentUser>(context, listen: false);
     // final User user =
     //     Provider.of<Users>(context, listen: false).withId(currentUser.userId);
-    TestLogin.login(
+    Login.login(
             password: passwordController.text,
             username: userNameController.text)
         .then((response) {
@@ -46,11 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
       currentUser.setToken = token;
       currentUser.setId = user.id;
       currentUser.setUser = user;
-      //  runApp(MyApp());
-      // context.router.replace<LoginRouter>(LandingRouter());
+
       context.router.popAndPush(const LandingRouter());
-      // Navigator.pushReplacement(context,
-      //     MaterialPageRoute(builder: (context) => const LandingScreen()));
     });
   }
 

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 import '../strings/server_host.dart';
 
-class TestLogin {
+class Login {
   static Uri url = Uri.parse("${serverHost}user/login");
   static Future<String> login(
       {required String password, required String username}) async {

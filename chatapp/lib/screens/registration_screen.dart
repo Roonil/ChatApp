@@ -1,9 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chatapp/router/router.gr.dart';
-import 'package:chatapp/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
+import '../screens/login_screen.dart';
 import '../remote/register.dart';
 
 class RegistrationScreen extends StatelessWidget {
