@@ -4,7 +4,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 //Color primaryColor = Colors.red.shade900.withAlpha(80);
 //Color primaryColor = Colors.purple.shade900.withAlpha(100);
 //const Color primaryColor = Color.fromARGB(255, 16, 2, 33);
-Color primaryColor = Color.fromARGB(255, 28, 0, 0); //Nice Purple
+Color primaryColor = Color.fromARGB(255, 4, 0, 28); //Nice Purple
 //Color primaryColor = Colors.black;
 
 //Color secondaryColor = Color.fromARGB(255, 53, 235, 255);
@@ -12,7 +12,7 @@ Color primaryColor = Color.fromARGB(255, 28, 0, 0); //Nice Purple
 //Color secondaryColor = Color.fromARGB(255, 186, 46, 246);
 //Color secondaryColor = Colors.white;
 //const Color primaryColor = Color.fromARGB(255, 33, 2, 2); //Blood Red
-Color secondaryColor = Colors.amber;
+Color secondaryColor = Colors.deepOrangeAccent;
 Color? onSecondary = ThemeData(
   colorSchemeSeed: secondaryColor,
   brightness: secondaryColor.isLight ? Brightness.light : Brightness.dark,

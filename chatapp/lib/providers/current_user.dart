@@ -56,6 +56,7 @@ class CurrentUser extends ChangeNotifier {
       user = User.fromJson((newJson));
       print(newJson);
       setUser = user as User;
+      setId = user?.id ?? 0;
     }
     print("USE");
     print(user);

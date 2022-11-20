@@ -113,7 +113,7 @@ class _RoomTileState extends State<RoomTile> {
       surfaceTintColor: Theme.of(context).primaryColorLight,
       elevation: 3,
       margin: const EdgeInsets.symmetric(
-        vertical: 2.5,
+        vertical: 5,
         horizontal: 5,
       ),
       child: widget.onSwipe == null

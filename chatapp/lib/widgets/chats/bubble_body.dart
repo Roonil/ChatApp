@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class BubbleBody extends StatelessWidget {
   final String body;
@@ -13,6 +14,7 @@ class BubbleBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Slidable.of(context)?.close();
     var content = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2.5),
       child: Text(

@@ -2,6 +2,7 @@ import 'package:chatapp/providers/sockets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import './providers/messages.dart';
 import './providers/rooms.dart';
@@ -45,6 +46,12 @@ class _MyAppState extends State<MyApp> {
   final appRouter = AppRouter();
 
   @override
+  dispose() {
+    Provider.of<Socket>(context).destroy();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
@@ -70,23 +77,20 @@ class LandingScreen extends StatelessWidget {
         : Provider.of<Users>(context, listen: false)
             .addUser(currentUser.user as User);
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: AutoTabsScaffold(
-        appBarBuilder: currentUser.token == null
-            ? null
-            : (context, tabsRouter) => tabsRouter.activeIndex == 1
-                ? UserScreen.appBar(context)
-                : RoomsScreen.appBar(context),
-        routes: currentUser.token == null
-            ? [
-                RegistrationRouter(),
-              ]
-            : [const RoomsRouter(), const UserRouter()],
-        bottomNavigationBuilder: currentUser.token == null
-            ? null
-            : (context, tabsRouter) => BottomNavBar(tabsRouter: tabsRouter),
-      ),
+    return AutoTabsScaffold(
+      appBarBuilder: currentUser.token == null
+          ? null
+          : (context, tabsRouter) => tabsRouter.activeIndex == 1
+              ? UserScreen.appBar(context)
+              : RoomsScreen.appBar(context),
+      routes: currentUser.token == null
+          ? [
+              RegistrationRouter(),
+            ]
+          : [const RoomsRouter(), const UserRouter()],
+      bottomNavigationBuilder: currentUser.token == null
+          ? null
+          : (context, tabsRouter) => BottomNavBar(tabsRouter: tabsRouter),
     );
   }
 }
